@@ -998,9 +998,9 @@ label {
     display: inline-block;
     margin-left: 5px;
     vertical-align: baseline;
-    font-family: 'Font Awesome 6 Pro';
-    content: "\f107";
-    font-weight: 900;
+    font-family: inherit;
+    content: "⌄";
+    font-weight: 700;
     border: none;
     font-size: 14px;
 }
@@ -1056,9 +1056,9 @@ label {
         padding-left: 22px;
     }
     .navbar .nav-item .dropdown-menu .dropdown-item::before {
-        content: "\f111";
+        content: "•";
         position: absolute;
-        font-family: "Font Awesome 6 pro";
+        font-family: inherit;
         left: 8px;
         top: 14px;
         color: var(--theme-color);
@@ -2443,13 +2443,13 @@ label {
 }
 
 .shop-checkbox-list.color .form-check-label span::before {
-    content: "\f00c";
+    content: "✓";
     position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
-    font-family: "Font Awesome 6 Pro";
+    font-family: inherit;
     color: var(--color-white);
     text-align: center;
     opacity: 0;
@@ -2951,9 +2951,9 @@ label {
 }
 
 .shop-checkout-payment .nav-link::before {
-    content: "\f058";
+    content: "✓";
     position: absolute;
-    font-family: "Font Awesome 6 Pro";
+    font-family: inherit;
     font-weight: bold;
     font-size: 20px;
     color: var(--theme-color);
@@ -7214,8 +7214,8 @@ label {
 
 .site-breadcrumb .breadcrumb-menu li::before {
     position: absolute;
-    content: '\f101';
-    font-family: 'Font Awesome 6 Pro';
+    content: '›';
+    font-family: inherit;
     right: -21px;
     top: 1px;
     text-align: center;
