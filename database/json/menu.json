@@ -1,0 +1,32 @@
+[
+    {
+        "menu_name": "Admin User",
+        "path": "users/",
+        "parent_id": "0",
+        "status": "1",
+        "category": "Common",
+        "is_parent": "1",
+        "orders": "7",
+        "icon": "bx-user"
+    },
+    {
+        "menu_name": "Create",
+        "path": "users/create",
+        "parent_id": "1",
+        "status": "1",
+        "category": "Common",
+        "is_parent": "2",
+        "orders": "1",
+        "icon": ""
+    },
+    {
+        "menu_name": "Manage",
+        "path": "users/manage",
+        "parent_id": "1",
+        "status": "1",
+        "category": "Common",
+        "is_parent": "2",
+        "orders": "2",
+        "icon": ""
+    }
+]
