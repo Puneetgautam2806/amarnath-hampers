@@ -136,11 +136,9 @@
         @keyframes loader-pulse {
             0%, 100% {
                 transform: scale(0.92);
-                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.03));
             }
             50% {
                 transform: scale(1.08);
-                filter: drop-shadow(0 12px 24px rgba(122, 78, 45, 0.18));
             }
         }
     </style>
