@@ -68,20 +68,37 @@
         }
         @media (max-width: 991.98px) {
             .hs-3 .hero-single {
-                height: 480px !important;
-                min-height: 480px !important;
+                height: 500px !important;
+                min-height: 500px !important;
             }
         }
         @media (max-width: 767.98px) {
             .hs-3 .hero-single {
-                height: 400px !important;
-                min-height: 400px !important;
+                height: auto !important;
+                min-height: 450px !important;
+                padding-top: 80px !important;
+                padding-bottom: 80px !important;
+            }
+            .hero-title {
+                font-size: 36px !important;
+                line-height: 1.2 !important;
             }
         }
         @media (max-width: 575.98px) {
             .hs-3 .hero-single {
-                height: 350px !important;
-                min-height: 350px !important;
+                height: auto !important;
+                min-height: 450px !important;
+                padding-top: 60px !important;
+                padding-bottom: 60px !important;
+            }
+            .hero-title {
+                font-size: 28px !important;
+                line-height: 1.2 !important;
+                margin-bottom: 15px !important;
+            }
+            .hero-content p {
+                font-size: 14px !important;
+                margin-bottom: 20px !important;
             }
         }
 
