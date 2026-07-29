@@ -648,14 +648,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            VanillaTilt.init(document.querySelectorAll(".tilt-3d"), {
-                max: 15,
-                speed: 400,
-                glare: true,
-                "max-glare": 0.2,
-                perspective: 1000,
-                scale: 1.02
-            });
+            if (window.matchMedia("(min-width: 992px)").matches) {
+                VanillaTilt.init(document.querySelectorAll(".tilt-3d"), {
+                    max: 15,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.2,
+                    perspective: 1000,
+                    scale: 1.02
+                });
+            }
         });
     </script>
 </body>
