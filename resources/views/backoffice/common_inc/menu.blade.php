@@ -140,7 +140,21 @@ $currentPath = request()->path(); // for active state
       <li class="menu-item {{ request()->routeIs('testimonials.*') ? 'active' : '' }}">
         <a href="{{ route('testimonials.index') }}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
-          <div class="text-truncate" data-i18n="Testimonials">Testimonials</div>
+          <div class="text-truncate" data-i18n="Testimonials">Testimonials / Reviews</div>
+        </a>
+      </li>
+      @php
+          $sidebarUnreadCount = \App\Models\ContactMessage::where('is_read', false)->count();
+      @endphp
+      <li class="menu-item {{ request()->routeIs('contact-messages.*') ? 'active' : '' }}">
+        <a href="{{ route('contact-messages.index') }}" class="menu-link d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <i class="menu-icon tf-icons bx bx-envelope"></i>
+            <div class="text-truncate" data-i18n="Contact Inquiries">Contact Inquiries</div>
+          </div>
+          @if ($sidebarUnreadCount > 0)
+            <span class="badge bg-danger rounded-pill">{{ $sidebarUnreadCount }}</span>
+          @endif
         </a>
       </li>
       @endif

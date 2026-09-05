@@ -30,8 +30,11 @@ class HomepageManagerController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'favicon' => 'nullable|image|mimes:ico,png,jpg,gif,svg,webp|max:1024',
             'phone' => 'nullable|string|max:50',
+            'whatsapp' => 'nullable|string|max:50',
             'email' => 'nullable|email|max:100',
             'address' => 'nullable|string|max:255',
+            'working_hours' => 'nullable|string|max:255',
+            'map_embed_url' => 'nullable|string',
             'facebook' => 'nullable|url|max:255',
             'twitter' => 'nullable|url|max:255',
             'instagram' => 'nullable|url|max:255',
@@ -68,8 +71,11 @@ class HomepageManagerController extends Controller
         }
 
         $settings->phone = $request->input('phone');
+        $settings->whatsapp = $request->input('whatsapp');
         $settings->email = $request->input('email');
         $settings->address = $request->input('address');
+        $settings->working_hours = $request->input('working_hours');
+        $settings->map_embed_url = $request->input('map_embed_url');
         $settings->facebook = $request->input('facebook');
         $settings->twitter = $request->input('twitter');
         $settings->instagram = $request->input('instagram');

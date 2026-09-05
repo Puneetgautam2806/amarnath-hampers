@@ -749,131 +749,64 @@
                     <div class="col-lg-6 mx-auto wow fadeInDown" data-wow-delay=".25s">
                         <div class="site-heading text-center">
                             <span class="site-title-tagline">Testimonials</span>
-                            <h2 class="site-title">What Our Client <span>Say's</span> About Us</h2>
+                            <h2 class="site-title">What Our Clients <span>Say</span> About Us</h2>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial-slider owl-carousel owl-theme wow fadeInUp" data-wow-delay=".25s">
-                    <div class="testimonial-item">
-                        <div class="testimonial-author">
-                            <div class="testimonial-author-img">
-                                <img src="{{ asset('frontend/assets/img/testimonial/01.jpg') }}" alt="">
+                    @forelse ($testimonials as $t)
+                        <div class="testimonial-item">
+                            <div class="testimonial-author">
+                                <div class="testimonial-author-img">
+                                    @if ($t->photo)
+                                        <img src="{{ asset($t->photo) }}" alt="{{ $t->name }}">
+                                    @else
+                                        <img src="{{ asset('frontend/assets/img/testimonial/01.jpg') }}" alt="{{ $t->name }}">
+                                    @endif
+                                </div>
+                                <div class="testimonial-author-info">
+                                    <h4>{{ $t->name }}</h4>
+                                    <p>{{ $t->designation ?? 'Verified Customer' }}</p>
+                                </div>
                             </div>
-                            <div class="testimonial-author-info">
-                                <h4>Sylvia H Green</h4>
-                                <p>Customer</p>
+                            <div class="testimonial-quote">
+                                <p>"{{ $t->review_text }}"</p>
                             </div>
-                        </div>
-                        <div class="testimonial-quote">
-                            <p>
-                                "Absolutely stunning work! Amar Nath Hampers transformed our wedding trousseau into something magical. Their attention to detail and traditional touches are unmatched in Agra."
-                            </p>
-                        </div>
-                        <div class="testimonial-rate">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt=""></div>
-                    </div>
-                    <div class="testimonial-item">
-                        <div class="testimonial-author">
-                            <div class="testimonial-author-img">
-                                <img src="{{ asset('frontend/assets/img/testimonial/02.jpg') }}" alt="">
+                            <div class="testimonial-rate">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $t->rating)
+                                        <i class="fas fa-star"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
                             </div>
-                            <div class="testimonial-author-info">
-                                <h4>Gordo Novak</h4>
-                                <p>Customer</p>
+                            <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote"></div>
+                        </div>
+                    @empty
+                        <div class="testimonial-item">
+                            <div class="testimonial-author">
+                                <div class="testimonial-author-img">
+                                    <img src="{{ asset('frontend/assets/img/testimonial/01.jpg') }}" alt="Sylvia">
+                                </div>
+                                <div class="testimonial-author-info">
+                                    <h4>Sylvia H Green</h4>
+                                    <p>Bride, Agra</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="testimonial-quote">
-                            <p>
-                                "We ordered customized ring platters and shagun envelopes for our son's engagement. The quality is premium and the delivery was perfectly on time."
-                            </p>
-                        </div>
-                        <div class="testimonial-rate">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt=""></div>
-                    </div>
-                    <div class="testimonial-item">
-                        <div class="testimonial-author">
-                            <div class="testimonial-author-img">
-                                <img src="{{ asset('frontend/assets/img/testimonial/03.jpg') }}" alt="">
+                            <div class="testimonial-quote">
+                                <p>"Absolutely stunning work! Amar Nath Hampers transformed our wedding trousseau into something magical. Their attention to detail and traditional touches are unmatched in Agra."</p>
                             </div>
-                            <div class="testimonial-author-info">
-                                <h4>Reid E Butt</h4>
-                                <p>Customer</p>
+                            <div class="testimonial-rate">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
                             </div>
+                            <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote"></div>
                         </div>
-                        <div class="testimonial-quote">
-                            <p>
-                                "The dry fruit hampers were a hit with all our corporate clients this Diwali. The packaging feels very luxurious and exactly what we wanted."
-                            </p>
-                        </div>
-                        <div class="testimonial-rate">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt=""></div>
-                    </div>
-                    <div class="testimonial-item">
-                        <div class="testimonial-author">
-                            <div class="testimonial-author-img">
-                                <img src="{{ asset('frontend/assets/img/testimonial/04.jpg') }}" alt="">
-                            </div>
-                            <div class="testimonial-author-info">
-                                <h4>Parker Jimenez</h4>
-                                <p>Customer</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-quote">
-                            <p>
-                                "Beautiful handcrafted chuda boxes! I felt so special on my wedding day. They use authentic materials and the embroidery work is flawless."
-                            </p>
-                        </div>
-                        <div class="testimonial-rate">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt=""></div>
-                    </div>
-                    <div class="testimonial-item">
-                        <div class="testimonial-author">
-                            <div class="testimonial-author-img">
-                                <img src="{{ asset('frontend/assets/img/testimonial/05.jpg') }}" alt="">
-                            </div>
-                            <div class="testimonial-author-info">
-                                <h4>Heruli Nez</h4>
-                                <p>Customer</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-quote">
-                            <p>
-                                "Amar Nath Hampers is our go-to place for all festive gifting. Their exclusive wedding boxes are elegant, and the customer service is highly professional."
-                            </p>
-                        </div>
-                        <div class="testimonial-rate">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt=""></div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -887,75 +820,61 @@
                     <div class="col-lg-6 mx-auto">
                         <div class="site-heading text-center">
                             <span class="site-title-tagline">Our Blog</span>
-                            <h2 class="site-title">Our Latest News & <span>Blog</span></h2>
+                            <h2 class="site-title">Our Latest News & <span>Stories</span></h2>
                         </div>
                     </div>
                 </div>
                 <div class="row g-4">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="blog-item-img">
-                                <img src="{{ asset('frontend/assets/img/blog/01.jpg') }}" alt="Thumb">
-                                <span class="blog-date"><i class="fas fa-calendar-alt"></i> Aug 12, 2024</span>
-                            </div>
-                            <div class="blog-item-info">
-                                <div class="blog-item-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="fas fa-user-circle"></i> By Alicia Davis</a></li>
-                                        <li><a href="#"><i class="fas fa-comments"></i> 2.5k Comments</a></li>
-                                    </ul>
+                    @forelse ($recentPosts as $post)
+                        <div class="col-md-6 col-lg-4">
+                            <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                                <div class="blog-item-img">
+                                    @if ($post->featured_image)
+                                        <img src="{{ asset($post->featured_image) }}" alt="{{ $post->title }}">
+                                    @else
+                                        <img src="{{ asset('frontend/assets/img/blog/01.jpg') }}" alt="{{ $post->title }}">
+                                    @endif
+                                    <span class="blog-date">
+                                        <i class="fas fa-calendar-alt"></i> 
+                                        {{ $post->published_at ? $post->published_at->format('M d, Y') : $post->created_at->format('M d, Y') }}
+                                    </span>
                                 </div>
-                                <h4 class="blog-title">
-                                    <a href="#">Top 5 Trousseau Packing Trends for Agra Brides in 2024</a>
-                                </h4>
-                                <p>Discover the latest styles in trousseau packing, from velvet trays with zari work to personalized floral boxes.</p>
-                                <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
+                                <div class="blog-item-info">
+                                    <div class="blog-item-meta">
+                                        <ul>
+                                            <li><a href="#"><i class="fas fa-user-circle"></i> By {{ $post->author_name ?? 'Amar Nath Hampers' }}</a></li>
+                                        </ul>
+                                    </div>
+                                    <h4 class="blog-title">
+                                        <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                                    </h4>
+                                    <p>{{ Str::limit($post->excerpt, 100) }}</p>
+                                    <a class="theme-btn" href="{{ route('blog.show', $post->slug) }}">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInDown" data-wow-delay=".25s">
-                            <div class="blog-item-img">
-                                <img src="{{ asset('frontend/assets/img/blog/02.jpg') }}" alt="Thumb">
-                                <span class="blog-date"><i class="fas fa-calendar-alt"></i> Aug 15, 2024</span>
-                            </div>
-                            <div class="blog-item-info">
-                                <div class="blog-item-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="fas fa-user-circle"></i> By Alicia Davis</a></li>
-                                        <li><a href="#"><i class="fas fa-comments"></i> 3.1k Comments</a></li>
-                                    </ul>
+                    @empty
+                        <div class="col-md-6 col-lg-4">
+                            <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                                <div class="blog-item-img">
+                                    <img src="{{ asset('frontend/assets/img/blog/01.jpg') }}" alt="Thumb">
+                                    <span class="blog-date"><i class="fas fa-calendar-alt"></i> Aug 12, 2026</span>
                                 </div>
-                                <h4 class="blog-title">
-                                    <a href="#">How to Choose the Perfect Ring Ceremony Platter</a>
-                                </h4>
-                                <p>A guide to selecting an engagement platter that highlights your rings and perfectly matches your wedding theme.</p>
-                                <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
+                                <div class="blog-item-info">
+                                    <div class="blog-item-meta">
+                                        <ul>
+                                            <li><a href="#"><i class="fas fa-user-circle"></i> By Amar Nath Hampers</a></li>
+                                        </ul>
+                                    </div>
+                                    <h4 class="blog-title">
+                                        <a href="{{ route('blog.index') }}">Top 5 Trousseau Packing Trends for Agra Brides</a>
+                                    </h4>
+                                    <p>Discover the latest styles in trousseau packing, from velvet trays with zari work to personalized floral boxes.</p>
+                                    <a class="theme-btn" href="{{ route('blog.index') }}">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="blog-item-img">
-                                <img src="{{ asset('frontend/assets/img/blog/03.jpg') }}" alt="Thumb">
-                                <span class="blog-date"><i class="fas fa-calendar-alt"></i> Aug 18, 2024</span>
-                            </div>
-                            <div class="blog-item-info">
-                                <div class="blog-item-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="fas fa-user-circle"></i> By Alicia Davis</a></li>
-                                        <li><a href="#"><i class="fas fa-comments"></i> 1.6k Comments</a></li>
-                                    </ul>
-                                </div>
-                                <h4 class="blog-title">
-                                    <a href="#"> If you are going use passage you need sure there middle text.</a>
-                                </h4>
-                                <p>There are many variations available the majority have suffered alteration randomised
-                                    words.</p>
-                                <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>

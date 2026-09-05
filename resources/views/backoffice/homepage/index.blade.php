@@ -99,18 +99,25 @@
                                     <div class="form-section-title mb-4" style="font-weight: 700; color: #435ebe; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">Primary Contact Channels</div>
                                     
                                     <div class="row mb-4">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label class="form-label" for="phone">Public Hotline / Phone</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="bx bx-phone"></i></span>
-                                                <input type="text" class="form-control" name="phone" id="phone" value="{{ old('phone', $settings?->phone) }}" placeholder="e.g. +2 123 654 7898">
+                                                <input type="text" class="form-control" name="phone" id="phone" value="{{ old('phone', $settings?->phone) }}" placeholder="e.g. +91 98765 43210">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="whatsapp">WhatsApp Business Number</label>
+                                            <div class="input-group input-group-merge">
+                                                <span class="input-group-text text-success"><i class="bx bxl-whatsapp"></i></span>
+                                                <input type="text" class="form-control" name="whatsapp" id="whatsapp" value="{{ old('whatsapp', $settings?->whatsapp) }}" placeholder="e.g. +919876543210">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <label class="form-label" for="email">Public Contact Email</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                                                <input type="email" class="form-control" name="email" id="email" value="{{ old('email', $settings?->email) }}" placeholder="e.g. info@amarnath-hampers.com">
+                                                <input type="email" class="form-control" name="email" id="email" value="{{ old('email', $settings?->email) }}" placeholder="e.g. contact@amarnathhampers.com">
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +125,7 @@
                                     <!-- Collapsible Trigger Button for Advanced General Settings -->
                                     <div class="mt-5 mb-2 text-center">
                                         <button class="btn btn-outline-primary w-100 fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedGeneralSettings" aria-expanded="false" aria-controls="advancedGeneralSettings" style="border-radius: 12px; font-size: 0.95rem; border-style: dashed; border-width: 2px;">
-                                            <i class="bx bx-slider me-1"></i> Address, Social Links, & Footer Customization (Optional)
+                                            <i class="bx bx-slider me-1"></i> Address, Working Hours, Google Maps, & Socials
                                         </button>
                                     </div>
 
@@ -128,29 +135,41 @@
                                             <div class="row">
                                                 <!-- Address and Footer Area -->
                                                 <div class="col-md-6">
-                                                    <h6 class="fw-bold text-primary mb-3"><i class="bx bx-map-pin me-1"></i> Address & Footer Settings</h6>
+                                                    <h6 class="fw-bold text-primary mb-3"><i class="bx bx-map-pin me-1"></i> Address & Operating Hours</h6>
                                                     
-                                                    <div class="mb-4">
-                                                        <label class="form-label" for="address">Store Location / Address</label>
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="address">Studio Location / Address</label>
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="bx bx-map"></i></span>
-                                                            <input type="text" class="form-control" name="address" id="address" value="{{ old('address', $settings?->address) }}" placeholder="e.g. 25/B Milford Road, New York, USA">
+                                                            <input type="text" class="form-control" name="address" id="address" value="{{ old('address', $settings?->address) }}" placeholder="e.g. Kinari Bazar, Agra, Uttar Pradesh, India">
                                                         </div>
                                                     </div>
 
-                                                    <div class="mb-4">
-                                                        <label class="form-label" for="footer_desc">Footer Description</label>
-                                                        <textarea class="form-control" name="footer_desc" id="footer_desc" rows="3" placeholder="Write a description for your footer...">{{ old('footer_desc', $settings?->footer_desc) }}</textarea>
-                                                        <span class="text-muted small">Brief explanation of your business displayed in the footer area</span>
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="working_hours">Business Operating Hours</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i class="bx bx-time"></i></span>
+                                                            <input type="text" class="form-control" name="working_hours" id="working_hours" value="{{ old('working_hours', $settings?->working_hours) }}" placeholder="e.g. Monday - Saturday (10:00 AM - 8:00 PM)">
+                                                        </div>
                                                     </div>
 
-                                                    <div class="mb-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="map_embed_url">Google Maps Embed URL / Iframe src</label>
+                                                        <textarea class="form-control" name="map_embed_url" id="map_embed_url" rows="2" placeholder="https://www.google.com/maps/embed?pb=...">{{ old('map_embed_url', $settings?->map_embed_url) }}</textarea>
+                                                        <span class="text-muted small">Paste Google Maps embed link to show interactive map on Contact Us page.</span>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="footer_desc">Footer Description</label>
+                                                        <textarea class="form-control" name="footer_desc" id="footer_desc" rows="2" placeholder="Write a description for your footer...">{{ old('footer_desc', $settings?->footer_desc) }}</textarea>
+                                                    </div>
+
+                                                    <div class="mb-3">
                                                         <label class="form-label" for="copyright_text">Footer Copyright Holder</label>
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="bx bx-copyright"></i></span>
-                                                            <input type="text" class="form-control" name="copyright_text" id="copyright_text" value="{{ old('copyright_text', $settings?->copyright_text) }}" placeholder="e.g. Amarnath Hampers and Materials">
+                                                            <input type="text" class="form-control" name="copyright_text" id="copyright_text" value="{{ old('copyright_text', $settings?->copyright_text) }}" placeholder="e.g. Amar Nath Hampers & Materials">
                                                         </div>
-                                                        <span class="text-muted small">Brand copyright text shown in the bottom bar</span>
                                                     </div>
                                                 </div>
 

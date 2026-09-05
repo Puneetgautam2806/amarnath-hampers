@@ -77,6 +77,7 @@ Route::get('/blog/{slug}', [\App\Http\Controllers\Frontend\PageController::class
 Route::get('/page/{slug}', [\App\Http\Controllers\Frontend\PageController::class, 'pageShow'])->name('page.show');
 Route::get('/about', [\App\Http\Controllers\Frontend\PageController::class, 'about'])->name('about');
 Route::get('/contact', [\App\Http\Controllers\Frontend\PageController::class, 'contact'])->name('contact');
+Route::post('/contact', [\App\Http\Controllers\Frontend\PageController::class, 'contactSubmit'])->name('contact.submit');
 
 // Storefront Customer Auth Routes
 Route::middleware('guest')->group(function () {
@@ -166,5 +167,7 @@ Route::middleware([ValidUser::class])->group(function () {
         Route::resource('backoffice/posts', \App\Http\Controllers\Backoffice\PostController::class);
         Route::resource('backoffice/promo_banners', \App\Http\Controllers\Backoffice\PromoBannerController::class);
         Route::resource('backoffice/testimonials', \App\Http\Controllers\Backoffice\TestimonialController::class);
+        Route::resource('backoffice/contact-messages', \App\Http\Controllers\Backoffice\ContactMessageController::class);
+        Route::post('backoffice/contact-messages/{contact_message}/toggle-read', [\App\Http\Controllers\Backoffice\ContactMessageController::class, 'toggleRead'])->name('contact-messages.toggle-read');
     });
 });

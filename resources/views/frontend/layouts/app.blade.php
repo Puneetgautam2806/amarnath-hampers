@@ -454,10 +454,10 @@
                                 {{ $settings?->footer_desc ?: 'Amarnath Hampers and Materials delivers quality hampers and essential materials with trusted service.' }}
                             </p>
                             <ul class="footer-contact">
-                                <li><a href="tel:{{ $settings?->phone ?: '+2 123 654 7898' }}"><i class="fas fa-phone"></i>{{ $settings?->phone ?: '+2 123 654 7898' }}</a></li>
-                                <li><i class="fas fa-map-marker-alt"></i>{{ $settings?->address ?: '25/B Milford Road, New York' }}</li>
-                                <li><a href="mailto:{{ $settings?->email ?: 'info@example.com' }}" style="word-break: break-all;"><i class="fas fa-envelope"></i>{{ $settings?->email ?: 'info@example.com' }}</a></li>
-                                <li><i class="fas fa-clock"></i>Mon-Fri (9.00AM - 8.00PM)</li>
+                                <li><a href="tel:{{ $settings?->phone ?: '+91 98765 43210' }}"><i class="fas fa-phone"></i>{{ $settings?->phone ?: '+91 98765 43210' }}</a></li>
+                                <li><i class="fas fa-map-marker-alt"></i>{{ $settings?->address ?: 'Kinari Bazar, Agra, UP, India' }}</li>
+                                <li><a href="mailto:{{ $settings?->email ?: 'contact@amarnathhampers.com' }}" style="word-break: break-all;"><i class="fas fa-envelope"></i>{{ $settings?->email ?: 'contact@amarnathhampers.com' }}</a></li>
+                                <li><i class="fas fa-clock"></i>{{ $settings?->working_hours ?: 'Mon-Sat (10.00AM - 8.30PM)' }}</li>
                             </ul>
                         </div>
                     </div>

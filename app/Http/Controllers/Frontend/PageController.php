@@ -5,39 +5,82 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\Post;
+use App\Models\SiteSetting;
+use App\Models\ContactMessage;
+use App\Models\Category;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     public function pageShow($slug)
     {
         $page = Page::where('slug', $slug)->where('status', 1)->firstOrFail();
-        return view('frontend.page', compact('page'));
+        $settings = SiteSetting::first();
+        return view('frontend.page', compact('page', 'settings'));
     }
 
     public function about()
     {
-        // Fallback to a page with slug 'about', or just a dedicated view if it doesn't exist
         $page = Page::where('slug', 'about')->where('status', 1)->first();
         if (!$page) {
-            $page = new Page(['title' => 'About Us', 'content' => 'Information about us...']);
+            $page = new Page([
+                'title' => 'About Amar Nath Hampers & Materials',
+                'content' => '<h3>Handcrafted Elegance & Bespoke Gifting in Agra</h3><p>Amar Nath Hampers & Materials specializes in bespoke wedding hampers, traditional ring ceremony platters, bridal accessories, and premium trousseau packaging. Located in the heart of Agra, we celebrate rich Indian craftsmanship and heritage with every customized hamper.</p>'
+            ]);
         }
-        return view('frontend.page', compact('page'));
+        $settings = SiteSetting::first();
+        return view('frontend.page', compact('page', 'settings'));
     }
 
     public function contact()
     {
-        return view('frontend.contact');
+        $settings = SiteSetting::first();
+        return view('frontend.contact', compact('settings'));
     }
 
-    public function blogIndex()
+    public function contactSubmit(Request $request)
     {
-        $posts = Post::where('status', 1)->orderBy('published_at', 'desc')->paginate(12);
-        return view('frontend.blog', compact('posts'));
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100',
+            'phone' => 'nullable|string|max:25',
+            'subject' => 'nullable|string|max:200',
+            'message' => 'required|string|max:2000',
+        ]);
+
+        ContactMessage::create($validated);
+
+        return redirect()->back()->with('success', 'Thank you! Your message has been sent successfully. Our team will get back to you shortly.');
+    }
+
+    public function blogIndex(Request $request)
+    {
+        $query = Post::where('status', 1)->orderBy('published_at', 'desc');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $posts = $query->paginate(9);
+        $recentPosts = Post::where('status', 1)->orderBy('published_at', 'desc')->take(5)->get();
+        $categories = Category::where('status', 1)->withCount('products')->get();
+        $settings = SiteSetting::first();
+
+        return view('frontend.blog', compact('posts', 'recentPosts', 'categories', 'settings'));
     }
 
     public function blogShow($slug)
     {
         $post = Post::where('slug', $slug)->where('status', 1)->firstOrFail();
-        return view('frontend.post', compact('post'));
+        $recentPosts = Post::where('status', 1)->where('id', '!=', $post->id)->orderBy('published_at', 'desc')->take(4)->get();
+        $categories = Category::where('status', 1)->withCount('products')->get();
+        $settings = SiteSetting::first();
+
+        return view('frontend.post', compact('post', 'recentPosts', 'categories', 'settings'));
     }
 }
