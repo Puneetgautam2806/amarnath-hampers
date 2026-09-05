@@ -14,6 +14,19 @@ if (!file_exists(__DIR__ . '/../vendor/autoload.php') && file_exists(__DIR__ . '
     }
 }
 
+// Clear any stale local dev bootstrap caches (prevents BoostServiceProvider not found)
+$staleCaches = [
+    __DIR__ . '/../bootstrap/cache/packages.php',
+    __DIR__ . '/../bootstrap/cache/services.php',
+    __DIR__ . '/../bootstrap/cache/config.php',
+    __DIR__ . '/../bootstrap/cache/routes-v7.php',
+];
+foreach ($staleCaches as $cacheFile) {
+    if (file_exists($cacheFile)) {
+        @unlink($cacheFile);
+    }
+}
+
 // Ensure essential storage framework folders exist on shared hosting
 $storageFolders = [
     __DIR__ . '/../storage/framework/views',
