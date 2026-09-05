@@ -13,6 +13,16 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
 
+    - name: 🐘 Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+
+    - name: 📦 Build Production Dependencies & Package
+      run: |
+        composer install --no-dev --optimize-autoloader --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        zip -q -r vendor.zip vendor
+
     - name: ⚙️ Generate Environment File
       run: |
         echo 'APP_NAME="Amar Nath Hampers"' > .env
