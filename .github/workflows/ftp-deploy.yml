@@ -18,8 +18,8 @@ jobs:
       with:
         php-version: '8.2'
 
-    - name: 📦 Install Composer Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: 📦 Install Production Composer Dependencies
+      run: composer install --no-dev --optimize-autoloader --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
     - name: ⚙️ Generate Environment File
       run: |
@@ -43,7 +43,16 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /htdocs/
+        protocol: ftp
+        port: 21
         exclude: |
           **/.git*
           **/.git*/**
           **/node_modules/**
+          **/tests/**
+          **/.github/**
+          storage/framework/cache/data/**
+          storage/framework/views/**
+          storage/logs/**
+          .phpunit*
+          phpunit.xml
