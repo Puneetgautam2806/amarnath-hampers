@@ -13,14 +13,6 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
 
-    - name: 🐘 Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-
-    - name: 📦 Install Production Composer Dependencies
-      run: composer install --no-dev --optimize-autoloader --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
     - name: ⚙️ Generate Environment File
       run: |
         echo 'APP_NAME="Amar Nath Hampers"' > .env
@@ -43,12 +35,11 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /htdocs/
-        protocol: ftp
-        port: 21
         exclude: |
           **/.git*
           **/.git*/**
           **/node_modules/**
+          **/vendor/**
           **/tests/**
           **/.github/**
           storage/framework/cache/data/**
