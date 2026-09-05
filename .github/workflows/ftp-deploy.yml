@@ -3,7 +3,7 @@ name: Deploy to InfinityFree via FTP
 on:
   push:
     branches:
-      - main # Triggers when pushing to the main branch
+      - main
 
 jobs:
   web-deploy:
@@ -12,7 +12,30 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
-    
+
+    - name: 🐘 Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+
+    - name: 📦 Install Composer Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: ⚙️ Generate Environment File
+      run: |
+        echo 'APP_NAME="Amar Nath Hampers"' > .env
+        echo 'APP_ENV=production' >> .env
+        echo 'APP_KEY=base64:SEJ7DM56cXgrbJyYIgCNi6OQgjo1mGsGz3FLdhjENvY=' >> .env
+        echo 'APP_DEBUG=false' >> .env
+        echo 'APP_URL=https://amarnath-gift-hampers.ct.ws' >> .env
+        echo 'ASSET_URL=/' >> .env
+        echo 'DB_CONNECTION=mysql' >> .env
+        echo 'DB_HOST=sql211.infinityfree.com' >> .env
+        echo 'DB_PORT=3306' >> .env
+        echo 'DB_DATABASE=if0_42433833_gift' >> .env
+        echo 'DB_USERNAME=if0_42433833' >> .env
+        echo 'DB_PASSWORD=${{ secrets.DB_PASSWORD }}' >> .env
+
     - name: 📂 Sync files via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -24,4 +47,3 @@ jobs:
           **/.git*
           **/.git*/**
           **/node_modules/**
-          .env
