@@ -17,7 +17,36 @@ use App\Http\Controllers\Backoffice\OrderController;
 use App\Http\Controllers\Frontend\ShopController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
- 
+use Illuminate\Support\Facades\Artisan;
+
+// Production Database Migration & Setup Helper Route
+Route::get('/migrate-db', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        $migrateOutput = Artisan::output();
+        
+        Artisan::call('db:seed', ['--class' => 'EcommerceSeeder', '--force' => true]);
+        $seedOutput = Artisan::output();
+
+        return "<div style='font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 800px; margin: 40px auto; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);'>
+            <h2 style='color: #28a745;'>🎉 Database Migrations & Seeds Successful!</h2>
+            <p>Your production MySQL database on InfinityFree has been updated with all latest tables and sample data.</p>
+            <hr>
+            <h4>Migration Log:</h4>
+            <pre style='background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #eee;'>" . e($migrateOutput) . "</pre>
+            <h4>Seeder Log:</h4>
+            <pre style='background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #eee;'>" . e($seedOutput) . "</pre>
+            <br>
+            <a href='/' style='display: inline-block; background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;'>Go to Homepage &rarr;</a>
+        </div>";
+    } catch (\Exception $e) {
+        return "<div style='font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 800px; margin: 40px auto; border: 1px solid #dc3545; border-radius: 12px;'>
+            <h2 style='color: #dc3545;'>⚠️ Error running migrations:</h2>
+            <pre style='background: #fff3f3; padding: 15px; border-radius: 8px; border: 1px solid #f5c6cb; color: #721c24;'>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>
+        </div>";
+    }
+});
+
 Route::get('/', function () {
     $settings = SiteSetting::first();
     $sliders = Slider::active()->orderBy('orders', 'asc')->get();

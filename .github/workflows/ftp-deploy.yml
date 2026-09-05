@@ -18,7 +18,7 @@ jobs:
         echo 'APP_NAME="Amar Nath Hampers"' > .env
         echo 'APP_ENV=production' >> .env
         echo 'APP_KEY=base64:SEJ7DM56cXgrbJyYIgCNi6OQgjo1mGsGz3FLdhjENvY=' >> .env
-        echo 'APP_DEBUG=false' >> .env
+        echo 'APP_DEBUG=true' >> .env
         echo 'APP_URL=https://amarnath-gift-hampers.ct.ws' >> .env
         echo 'ASSET_URL=/' >> .env
         echo 'DB_CONNECTION=mysql' >> .env
