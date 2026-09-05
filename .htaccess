@@ -1,5 +1,8 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    RewriteCond %{REQUEST_URI} !^public
+    RewriteEngine On
+    DirectoryIndex public/index.php index.php
+
+    # If requesting root or anything not starting with /public, rewrite to public
+    RewriteCond %{REQUEST_URI} !^/public/ [NC]
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
