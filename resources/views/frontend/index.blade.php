@@ -753,61 +753,141 @@
                         </div>
                     </div>
                 </div>
-                <div class="testimonial-slider owl-carousel owl-theme wow fadeInUp" data-wow-delay=".25s">
-                    @forelse ($testimonials as $t)
-                        <div class="testimonial-item">
-                            <div class="testimonial-author">
-                                <div class="testimonial-author-img">
-                                    @if ($t->photo)
-                                        <img src="{{ asset($t->photo) }}" alt="{{ $t->name }}">
-                                    @else
-                                        <img src="{{ asset('frontend/assets/img/testimonial/01.jpg') }}" alt="{{ $t->name }}">
-                                    @endif
-                                </div>
-                                <div class="testimonial-author-info">
-                                    <h4>{{ $t->name }}</h4>
-                                    <p>{{ $t->designation ?? 'Verified Customer' }}</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-quote">
-                                <p>"{{ $t->review_text }}"</p>
-                            </div>
-                            <div class="testimonial-rate">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <= $t->rating)
-                                        <i class="fas fa-star"></i>
-                                    @else
-                                        <i class="far fa-star"></i>
-                                    @endif
-                                @endfor
-                            </div>
-                            <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote"></div>
-                        </div>
-                    @empty
-                        <div class="testimonial-item">
-                            <div class="testimonial-author">
-                                <div class="testimonial-author-img">
-                                    <img src="{{ asset('frontend/assets/img/testimonial/01.jpg') }}" alt="Sylvia">
-                                </div>
-                                <div class="testimonial-author-info">
-                                    <h4>Sylvia H Green</h4>
-                                    <p>Bride, Agra</p>
+                @if ($testimonials->count() == 1)
+                    <div class="row justify-content-center">
+                        @foreach ($testimonials as $t)
+                            <div class="col-lg-6 col-md-8">
+                                <div class="testimonial-item shadow-sm border rounded-4 p-4" style="background: #fff; position: relative;">
+                                    <div class="testimonial-author d-flex align-items-center mb-3">
+                                        <div class="testimonial-author-img d-flex align-items-center justify-content-center overflow-hidden me-3" style="width: 65px; height: 65px; border-radius: 50%; flex-shrink: 0;">
+                                            @if ($t->photo)
+                                                <img src="{{ asset($t->photo) }}" alt="{{ $t->name }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($t->name) }}&background=a0734f&color=fff&size=100';">
+                                            @else
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-white fw-bold" style="background: linear-gradient(135deg, #a0734f, #6c4728); font-size: 20px;">
+                                                    {{ strtoupper(substr($t->name, 0, 2)) }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="testimonial-author-info">
+                                            <h4 class="mb-1 text-dark fw-bold">{{ $t->name }}</h4>
+                                            <p class="text-muted small mb-0">{{ $t->designation ?? 'Verified Customer' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="testimonial-quote mb-3">
+                                        <p class="text-dark mb-0" style="font-size: 15px; line-height: 1.6;">"{{ $t->review_text }}"</p>
+                                    </div>
+                                    <div class="testimonial-rate text-warning">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $t->rating)
+                                                <i class="fas fa-star"></i>
+                                            @else
+                                                <i class="far fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <div class="testimonial-quote-icon" style="position: absolute; right: 25px; bottom: 20px; opacity: 0.15;"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote" width="40"></div>
                                 </div>
                             </div>
-                            <div class="testimonial-quote">
-                                <p>"Absolutely stunning work! Amar Nath Hampers transformed our wedding trousseau into something magical. Their attention to detail and traditional touches are unmatched in Agra."</p>
+                        @endforeach
+                    </div>
+                @elseif ($testimonials->count() == 2)
+                    <div class="row justify-content-center g-4">
+                        @foreach ($testimonials as $t)
+                            <div class="col-lg-5 col-md-6">
+                                <div class="testimonial-item shadow-sm border rounded-4 p-4 h-100" style="background: #fff; position: relative;">
+                                    <div class="testimonial-author d-flex align-items-center mb-3">
+                                        <div class="testimonial-author-img d-flex align-items-center justify-content-center overflow-hidden me-3" style="width: 65px; height: 65px; border-radius: 50%; flex-shrink: 0;">
+                                            @if ($t->photo)
+                                                <img src="{{ asset($t->photo) }}" alt="{{ $t->name }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($t->name) }}&background=a0734f&color=fff&size=100';">
+                                            @else
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-white fw-bold" style="background: linear-gradient(135deg, #a0734f, #6c4728); font-size: 20px;">
+                                                    {{ strtoupper(substr($t->name, 0, 2)) }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="testimonial-author-info">
+                                            <h4 class="mb-1 text-dark fw-bold">{{ $t->name }}</h4>
+                                            <p class="text-muted small mb-0">{{ $t->designation ?? 'Verified Customer' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="testimonial-quote mb-3">
+                                        <p class="text-dark mb-0" style="font-size: 15px; line-height: 1.6;">"{{ $t->review_text }}"</p>
+                                    </div>
+                                    <div class="testimonial-rate text-warning">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $t->rating)
+                                                <i class="fas fa-star"></i>
+                                            @else
+                                                <i class="far fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <div class="testimonial-quote-icon" style="position: absolute; right: 25px; bottom: 20px; opacity: 0.15;"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote" width="40"></div>
+                                </div>
                             </div>
-                            <div class="testimonial-rate">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="testimonial-slider owl-carousel owl-theme wow fadeInUp" data-wow-delay=".25s">
+                        @forelse ($testimonials as $t)
+                            <div class="testimonial-item">
+                                <div class="testimonial-author">
+                                    <div class="testimonial-author-img d-flex align-items-center justify-content-center overflow-hidden" style="width: 65px; height: 65px; border-radius: 50%;">
+                                        @if ($t->photo)
+                                            <img src="{{ asset($t->photo) }}" alt="{{ $t->name }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode($t->name) }}&background=a0734f&color=fff&size=100';">
+                                        @else
+                                            <div class="w-100 h-100 d-flex align-items-center justify-content-center text-white fw-bold" style="background: linear-gradient(135deg, #a0734f, #6c4728); font-size: 20px;">
+                                                {{ strtoupper(substr($t->name, 0, 2)) }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="testimonial-author-info">
+                                        <h4>{{ $t->name }}</h4>
+                                        <p>{{ $t->designation ?? 'Verified Customer' }}</p>
+                                    </div>
+                                </div>
+                                <div class="testimonial-quote">
+                                    <p>"{{ $t->review_text }}"</p>
+                                </div>
+                                <div class="testimonial-rate">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $t->rating)
+                                            <i class="fas fa-star"></i>
+                                        @else
+                                            <i class="far fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote"></div>
                             </div>
-                            <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote"></div>
-                        </div>
-                    @endforelse
-                </div>
+                        @empty
+                            <div class="testimonial-item">
+                                <div class="testimonial-author">
+                                    <div class="testimonial-author-img">
+                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-white fw-bold" style="background: linear-gradient(135deg, #a0734f, #6c4728); font-size: 20px; border-radius: 50%;">
+                                            AN
+                                        </div>
+                                    </div>
+                                    <div class="testimonial-author-info">
+                                        <h4>Amar Nath Client</h4>
+                                        <p>Agra</p>
+                                    </div>
+                                </div>
+                                <div class="testimonial-quote">
+                                    <p>"Absolutely stunning work! Amar Nath Hampers transformed our wedding trousseau into something magical. Their attention to detail and traditional touches are unmatched in Agra."</p>
+                                </div>
+                                <div class="testimonial-rate">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="testimonial-quote-icon"><img src="{{ asset('frontend/assets/img/icon/quote.svg') }}" alt="Quote"></div>
+                            </div>
+                        @endforelse
+                    </div>
+                @endif
             </div>
         </div>
         <!-- testimonial area end -->

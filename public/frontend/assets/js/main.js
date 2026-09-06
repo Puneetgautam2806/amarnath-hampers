@@ -192,27 +192,31 @@ Version         : 1.0
 
 
     // testimonial slider
-    $('.testimonial-slider').owlCarousel({
-        loop: true,
-        margin: 20,
-        nav: false,
-        dots: true,
-        autoplay: true,
-        responsive: {
-            0: {
-                items: 1
-            },
-            600: {
-                items: 2
-            },
-            1000: {
-                items: 3
-            },
-            1400: {
-                items: 4
+    var $testimonialSlider = $('.testimonial-slider');
+    if ($testimonialSlider.length) {
+        var tCount = $testimonialSlider.children('.testimonial-item').length;
+        $testimonialSlider.owlCarousel({
+            loop: tCount > 3,
+            margin: 20,
+            nav: false,
+            dots: tCount > 1,
+            autoplay: tCount > 1,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: Math.min(tCount, 2)
+                },
+                1000: {
+                    items: Math.min(tCount, 3)
+                },
+                1400: {
+                    items: Math.min(tCount, 4)
+                }
             }
-        }
-    });
+        });
+    }
 
 
     // brand slider
