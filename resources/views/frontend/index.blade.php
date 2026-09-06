@@ -585,7 +585,7 @@
 
 
         <!-- about area -->
-        <div class="about-area py-120">
+        <div class="about-area py-120" id="about">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6">
@@ -629,7 +629,7 @@
                                     <li><i class="fas fa-check-double"></i> Trusted by Elite Families in Agra</li>
                                 </ul>
                             </div>
-                            <a href="contact.html" class="theme-btn mt-4">Discover More<i
+                            <a href="{{ route('contact') }}" class="theme-btn mt-4">Discover More<i
                                     class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>

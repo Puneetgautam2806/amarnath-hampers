@@ -104,7 +104,9 @@ Route::post('/payment/process/{order_number}', [\App\Http\Controllers\Frontend\P
 Route::get('/blog', [\App\Http\Controllers\Frontend\PageController::class, 'blogIndex'])->name('blog.index');
 Route::get('/blog/{slug}', [\App\Http\Controllers\Frontend\PageController::class, 'blogShow'])->name('blog.show');
 Route::get('/page/{slug}', [\App\Http\Controllers\Frontend\PageController::class, 'pageShow'])->name('page.show');
-Route::get('/about', [\App\Http\Controllers\Frontend\PageController::class, 'about'])->name('about');
+Route::get('/about', function() {
+    return redirect('/#about');
+})->name('about');
 Route::get('/contact', [\App\Http\Controllers\Frontend\PageController::class, 'contact'])->name('contact');
 Route::post('/contact', [\App\Http\Controllers\Frontend\PageController::class, 'contactSubmit'])->name('contact.submit');
 

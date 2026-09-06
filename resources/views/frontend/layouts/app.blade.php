@@ -321,7 +321,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/#about') }}">About</a></li>
                                 <!-- Removed redundant Pages dropdown -->
                                 @auth
                                 <li class="nav-item dropdown">
@@ -465,7 +465,7 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Quick Links</h4>
                             <ul class="footer-list">
-                                <li><a href="{{ route('about') }}">About Us</a></li>
+                                <li><a href="{{ url('/#about') }}">About Us</a></li>
                                 <li><a href="{{ route('contact') }}">Contact Us</a></li>
                                 <li><a href="{{ route('blog.index') }}">Blog News</a></li>
                                 <li><a href="{{ route('page.show', 'terms-of-service') }}">Terms Of Service</a></li>
