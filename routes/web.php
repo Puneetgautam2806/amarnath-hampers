@@ -65,9 +65,9 @@ Route::get('/', function () {
         ->orderBy('id', 'desc')
         ->take(10)
         ->get();
-    $recentPosts = App\Models\Post::where('status', 1)->orderBy('published_at', 'desc')->take(3)->get();
+    $recentPosts = App\Models\Post::where('status', 1)->orderBy('id', 'desc')->take(6)->get();
     $promoBanners = App\Models\PromoBanner::where('status', 1)->orderBy('sort_order', 'asc')->get();
-    $testimonials = App\Models\Testimonial::where('status', 1)->orderBy('sort_order', 'asc')->get();
+    $testimonials = App\Models\Testimonial::where('status', 1)->orderBy('sort_order', 'asc')->orderBy('id', 'desc')->get();
     return view('frontend.index', compact('settings', 'sliders', 'categories', 'products', 'featuredProducts', 'dealProducts', 'recentPosts', 'promoBanners', 'testimonials'));
 })->name('home');
 

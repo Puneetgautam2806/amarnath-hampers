@@ -21,15 +21,9 @@ class PageController extends Controller
 
     public function about()
     {
-        $page = Page::where('slug', 'about')->where('status', 1)->first();
-        if (!$page) {
-            $page = new Page([
-                'title' => 'About Amar Nath Hampers & Materials',
-                'content' => '<h3>Handcrafted Elegance & Bespoke Gifting in Agra</h3><p>Amar Nath Hampers & Materials specializes in bespoke wedding hampers, traditional ring ceremony platters, bridal accessories, and premium trousseau packaging. Located in the heart of Agra, we celebrate rich Indian craftsmanship and heritage with every customized hamper.</p>'
-            ]);
-        }
         $settings = SiteSetting::first();
-        return view('frontend.page', compact('page', 'settings'));
+        $testimonials = \App\Models\Testimonial::where('status', 1)->orderBy('sort_order', 'asc')->get();
+        return view('frontend.about', compact('settings', 'testimonials'));
     }
 
     public function contact()
@@ -55,7 +49,7 @@ class PageController extends Controller
 
     public function blogIndex(Request $request)
     {
-        $query = Post::where('status', 1)->orderBy('published_at', 'desc');
+        $query = Post::where('status', 1)->orderBy('id', 'desc');
 
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -67,7 +61,7 @@ class PageController extends Controller
         }
 
         $posts = $query->paginate(9);
-        $recentPosts = Post::where('status', 1)->orderBy('published_at', 'desc')->take(5)->get();
+        $recentPosts = Post::where('status', 1)->orderBy('id', 'desc')->take(5)->get();
         $categories = Category::where('status', 1)->withCount('products')->get();
         $settings = SiteSetting::first();
 
@@ -77,7 +71,7 @@ class PageController extends Controller
     public function blogShow($slug)
     {
         $post = Post::where('slug', $slug)->where('status', 1)->firstOrFail();
-        $recentPosts = Post::where('status', 1)->where('id', '!=', $post->id)->orderBy('published_at', 'desc')->take(4)->get();
+        $recentPosts = Post::where('status', 1)->where('id', '!=', $post->id)->orderBy('id', 'desc')->take(4)->get();
         $categories = Category::where('status', 1)->withCount('products')->get();
         $settings = SiteSetting::first();
 

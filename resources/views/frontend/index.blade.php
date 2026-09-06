@@ -876,6 +876,11 @@
                         </div>
                     @endforelse
                 </div>
+                @if (count($recentPosts) > 0)
+                    <div class="text-center mt-5">
+                        <a href="{{ route('blog.index') }}" class="theme-btn">View All Articles <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                @endif
             </div>
         </div>
         <!-- blog area end -->
