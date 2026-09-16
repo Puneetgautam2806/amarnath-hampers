@@ -146,12 +146,33 @@
                                                     <i class="fas fa-star"></i>
                                                     <i class="fas fa-star"></i>
                                                 </div>
-                                                <div class="product-price mb-3">
+                                                <div class="product-price mb-2">
                                                     @if($product->compare_at_price)
                                                         <del class="text-muted mr-2" style="font-size: 0.9rem;">₹{{ number_format($product->compare_at_price, 2) }}</del>
                                                     @endif
                                                     <span class="font-weight-bold" style="font-size: 1.2rem; color: #ff7c8b;">₹{{ number_format($product->price, 2) }}</span>
                                                 </div>
+
+                                                <!-- Color & Size Indicators -->
+                                                @if(count($product->colors_list) > 0 || count($product->sizes_list) > 0)
+                                                    <div class="product-card-variants d-flex justify-content-center align-items-center gap-2 mb-2 flex-wrap">
+                                                        @if(count($product->colors_list) > 0)
+                                                            <div class="d-flex align-items-center gap-1" title="{{ implode(', ', $product->colors_list) }}">
+                                                                @foreach(array_slice($product->colors_list, 0, 4) as $col)
+                                                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background-color: {{ strtolower(str_replace([' ', 'royal', 'antique', 'deep', 'baby'], '', $col)) }};" title="{{ $col }}"></span>
+                                                                @endforeach
+                                                                @if(count($product->colors_list) > 4)
+                                                                    <small class="text-muted" style="font-size: 10px;">+{{ count($product->colors_list) - 4 }}</small>
+                                                                @endif
+                                                            </div>
+                                                        @endif
+                                                        @if(count($product->sizes_list) > 0)
+                                                            <span class="badge bg-light text-muted border py-0 px-1" style="font-size: 10px;">
+                                                                {{ count($product->sizes_list) }} Sizes
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="text-center mt-auto">
                                                 <form action="{{ route('cart.add') }}" method="POST" class="w-100">
