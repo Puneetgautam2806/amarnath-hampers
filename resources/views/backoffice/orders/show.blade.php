@@ -54,6 +54,16 @@
                                     </td>
                                     <td>
                                         <strong class="text-dark d-block fw-semibold">{{ $item->product_name }}</strong>
+                                        @if(!empty($item->color) || !empty($item->size))
+                                            <div class="d-flex flex-wrap gap-1 mt-1 mb-1">
+                                                @if(!empty($item->color))
+                                                    <span class="badge bg-label-primary px-2 py-1" style="font-size: 11px;"><i class="bx bx-palette me-1"></i> Color: {{ $item->color }}</span>
+                                                @endif
+                                                @if(!empty($item->size))
+                                                    <span class="badge bg-label-info px-2 py-1" style="font-size: 11px;"><i class="bx bx-expand-arrows me-1"></i> Size: {{ $item->size }}</span>
+                                                @endif
+                                            </div>
+                                        @endif
                                         @if ($item->product)
                                             <small class="text-muted">Category: {{ $item->product->category?->name ?: 'Standard' }}</small>
                                         @endif

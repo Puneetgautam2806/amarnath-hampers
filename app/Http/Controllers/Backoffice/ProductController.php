@@ -45,6 +45,8 @@ class ProductController extends Controller
             'is_featured' => 'required|in:0,1',
             'short_description' => 'nullable|string|max:1000',
             'description' => 'nullable|string',
+            'colors' => 'nullable|string|max:500',
+            'sizes' => 'nullable|string|max:500',
         ]);
 
         $slug = Str::slug($request->name);
@@ -72,6 +74,8 @@ class ProductController extends Controller
             'image' => $imagePath,
             'status' => $request->status,
             'is_featured' => $request->is_featured,
+            'colors' => $request->colors,
+            'sizes' => $request->sizes,
             'short_description' => $request->short_description,
             'description' => $request->description,
         ]);
@@ -102,6 +106,8 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
             'status' => 'required|in:0,1',
             'is_featured' => 'required|in:0,1',
+            'colors' => 'nullable|string|max:500',
+            'sizes' => 'nullable|string|max:500',
             'short_description' => 'nullable|string|max:1000',
             'description' => 'nullable|string',
         ]);
@@ -136,6 +142,8 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'status' => $request->status,
             'is_featured' => $request->is_featured,
+            'colors' => $request->colors,
+            'sizes' => $request->sizes,
             'short_description' => $request->short_description,
             'description' => $request->description,
         ]);

@@ -18,11 +18,15 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'qty' => 'integer|min:1'
+            'qty' => 'integer|min:1',
+            'color' => 'nullable|string|max:100',
+            'size' => 'nullable|string|max:100',
         ]);
 
         $productId = $request->product_id;
         $qty = $request->input('qty', 1);
+        $color = $request->input('color');
+        $size = $request->input('size');
 
         $product = Product::where('status', 1)->find($productId);
         if (!$product) {
@@ -36,19 +40,31 @@ class CartController extends Controller
 
         $cart = session('cart', []);
 
-        if (isset($cart[$productId])) {
-            $newQty = $cart[$productId]['qty'] + $qty;
+        // Unique key for variant
+        $cartKey = (string)$productId;
+        if (!empty($color)) {
+            $cartKey .= '_' . \Illuminate\Support\Str::slug($color);
+        }
+        if (!empty($size)) {
+            $cartKey .= '_' . \Illuminate\Support\Str::slug($size);
+        }
+
+        if (isset($cart[$cartKey])) {
+            $newQty = $cart[$cartKey]['qty'] + $qty;
             if ($product->stock < $newQty) {
                 return redirect()->back()->with('error', "Cannot add more. Maximum available stock is {$product->stock}.");
             }
-            $cart[$productId]['qty'] = $newQty;
+            $cart[$cartKey]['qty'] = $newQty;
         } else {
-            $cart[$productId] = [
+            $cart[$cartKey] = [
                 'id' => $product->id,
+                'cart_key' => $cartKey,
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'price' => $product->price,
                 'image' => $product->image,
+                'color' => $color,
+                'size' => $size,
                 'qty' => $qty
             ];
         }
@@ -67,14 +83,15 @@ class CartController extends Controller
 
         $cart = session('cart', []);
 
-        foreach ($request->qty as $id => $qty) {
-            if (isset($cart[$id])) {
-                $product = Product::find($id);
+        foreach ($request->qty as $key => $qty) {
+            if (isset($cart[$key])) {
+                $productId = $cart[$key]['id'] ?? $key;
+                $product = Product::find($productId);
                 if ($product) {
                     if ($product->stock < $qty) {
                         return redirect()->back()->with('error', "Only {$product->stock} units are available for {$product->name}.");
                     }
-                    $cart[$id]['qty'] = intval($qty);
+                    $cart[$key]['qty'] = intval($qty);
                 }
             }
         }

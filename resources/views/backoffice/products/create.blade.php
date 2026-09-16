@@ -76,6 +76,58 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Product Variants Section (Colors & Sizes) -->
+                <div class="card mb-6 border-0" style="border-radius: 16px; box-shadow: 0 8px 26px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
+                    <div class="card-header border-bottom py-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0 text-dark fw-bold"><i class="bx bx-palette text-primary me-2"></i> Product Variants (Colors & Sizes)</h5>
+                            <small class="text-muted">Allow customers to choose their preferred color and size on the product page</small>
+                        </div>
+                        <span class="badge bg-label-info">Optional</span>
+                    </div>
+                    <div class="card-body pt-6">
+                        <div class="mb-4">
+                            <label class="form-label text-dark fw-semibold d-flex justify-content-between">
+                                <span><i class="bx bx-color-fill text-warning me-1"></i> Available Colors</span>
+                                <small class="text-muted">Separate multiple colors with comma (,)</small>
+                            </label>
+                            <input type="text" name="colors" id="colorsInput" class="form-control" value="{{ old('colors') }}" placeholder="e.g. Royal Maroon, Antique Gold, Emerald Green, Baby Pink, Royal Blue" style="border-radius: 8px; padding: 10px 14px;">
+                            
+                            <!-- Quick add badges -->
+                            <div class="mt-2 d-flex flex-wrap gap-1 align-items-center">
+                                <small class="text-muted me-1">Quick Add:</small>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Royal Maroon')">+ Maroon</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Antique Gold')">+ Gold</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Emerald Green')">+ Emerald Green</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Baby Pink')">+ Pink</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Royal Blue')">+ Royal Blue</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Ivory White')">+ Ivory White</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Deep Red')">+ Red</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label text-dark fw-semibold d-flex justify-content-between">
+                                <span><i class="bx bx-expand-arrows text-info me-1"></i> Available Sizes / Dimensions</span>
+                                <small class="text-muted">Separate multiple sizes with comma (,)</small>
+                            </label>
+                            <input type="text" name="sizes" id="sizesInput" class="form-control" value="{{ old('sizes') }}" placeholder="e.g. Small (10x10), Medium (14x14), Large (18x18), Standard" style="border-radius: 8px; padding: 10px 14px;">
+                            
+                            <!-- Quick add badges -->
+                            <div class="mt-2 d-flex flex-wrap gap-1 align-items-center">
+                                <small class="text-muted me-1">Quick Add:</small>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Small')">+ Small</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Medium')">+ Medium</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Large')">+ Large</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Extra Large (XL)')">+ XL</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Standard')">+ Standard</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', '10x10 Inch')">+ 10"x10"</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', '14x14 Inch')">+ 14"x14"</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Side: Category, Status, Graphic Upload -->
@@ -162,6 +214,19 @@
                 document.getElementById('imagePreviewContainer').classList.remove('d-none');
             };
             reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function addTag(inputId, val) {
+        var input = document.getElementById(inputId);
+        var current = input.value.trim();
+        if (current === '') {
+            input.value = val;
+        } else {
+            var parts = current.split(',').map(function(s){ return s.trim(); });
+            if (parts.indexOf(val) === -1) {
+                input.value = current + ', ' + val;
+            }
         }
     }
 </script>

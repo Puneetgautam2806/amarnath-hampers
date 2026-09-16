@@ -68,7 +68,8 @@
                                         @php
                                             $totalPrice = $item['price'] * $item['qty'];
                                             $subtotal += $totalPrice;
-                                            $productObj = \App\Models\Product::find($id);
+                                            $productId = $item['id'] ?? $id;
+                                            $productObj = \App\Models\Product::find($productId);
                                             $maxStock = $productObj ? $productObj->stock : 10;
                                         @endphp
                                         <tr class="border-bottom">
@@ -77,9 +78,19 @@
                                                     <img src="{{ asset($item['image']) }}" class="img-fluid" style="max-height: 60px; object-fit: contain;" alt="{{ $item['name'] }}">
                                                 </div>
                                                 <div>
-                                                    <h5 class="font-weight-bold mb-0 text-left" style="font-size: 1.05rem; text-align: left;">
+                                                    <h5 class="font-weight-bold mb-1 text-left" style="font-size: 1.05rem; text-align: left;">
                                                         <a href="{{ route('shop.show', $item['slug']) }}" class="text-dark text-decoration-none hover-pink">{{ $item['name'] }}</a>
                                                     </h5>
+                                                    @if(!empty($item['color']) || !empty($item['size']))
+                                                        <div class="d-flex flex-wrap gap-1 mt-1 text-left" style="text-align: left;">
+                                                            @if(!empty($item['color']))
+                                                                <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.75rem;"><i class="fas fa-palette text-muted me-1"></i> Color: <strong>{{ $item['color'] }}</strong></span>
+                                                            @endif
+                                                            @if(!empty($item['size']))
+                                                                <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.75rem;"><i class="fas fa-ruler-combined text-muted me-1"></i> Size: <strong>{{ $item['size'] }}</strong></span>
+                                                            @endif
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </td>
                                             <td class="py-4 font-weight-bold" style="font-size: 1.1rem;">
@@ -87,9 +98,9 @@
                                             </td>
                                             <td class="py-4">
                                                 <div class="quantity-selector d-inline-flex align-items-center border rounded-pill overflow-hidden bg-light" style="width: 120px; height: 40px;">
-                                                    <button type="button" class="btn btn-link text-dark text-decoration-none px-2 font-weight-bold" onclick="decrementQty({{ $id }})"><i class="fas fa-minus" style="font-size: 0.8rem;"></i></button>
+                                                    <button type="button" class="btn btn-link text-dark text-decoration-none px-2 font-weight-bold" onclick="decrementQty('{{ $id }}')"><i class="fas fa-minus" style="font-size: 0.8rem;"></i></button>
                                                     <input type="number" id="qty-{{ $id }}" name="qty[{{ $id }}]" class="form-control text-center bg-transparent border-0 font-weight-bold p-0" value="{{ $item['qty'] }}" min="1" max="{{ $maxStock }}" style="box-shadow: none; font-size: 0.95rem;">
-                                                    <button type="button" class="btn btn-link text-dark text-decoration-none px-2 font-weight-bold" onclick="incrementQty({{ $id }}, {{ $maxStock }})"><i class="fas fa-plus" style="font-size: 0.8rem;"></i></button>
+                                                    <button type="button" class="btn btn-link text-dark text-decoration-none px-2 font-weight-bold" onclick="incrementQty('{{ $id }}', {{ $maxStock }})"><i class="fas fa-plus" style="font-size: 0.8rem;"></i></button>
                                                 </div>
                                             </td>
                                             <td class="py-4 font-weight-bold text-pink" style="font-size: 1.1rem; color: #ff7c8b;">

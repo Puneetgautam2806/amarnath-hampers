@@ -52,8 +52,9 @@ class CheckoutController extends Controller
             DB::beginTransaction();
 
             // Double check stock levels for all products before creating order
-            foreach ($cart as $id => $item) {
-                $product = Product::lockForUpdate()->find($id);
+            foreach ($cart as $key => $item) {
+                $productId = $item['id'] ?? $key;
+                $product = Product::lockForUpdate()->find($productId);
                 if (!$product || $product->stock < $item['qty']) {
                     DB::rollBack();
                     return redirect()->back()->withInput()->with('error', "Sorry, the product '{$item['name']}' is no longer available in the requested quantity.");
@@ -76,20 +77,25 @@ class CheckoutController extends Controller
             ]);
 
             // Save Order Items and decrement stock
-            foreach ($cart as $id => $item) {
-                $product = Product::find($id);
+            foreach ($cart as $key => $item) {
+                $productId = $item['id'] ?? $key;
+                $product = Product::find($productId);
                 
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'product_name' => $product->name,
+                    'product_id' => $product ? $product->id : null,
+                    'product_name' => $item['name'],
+                    'color' => $item['color'] ?? null,
+                    'size' => $item['size'] ?? null,
                     'price' => $item['price'],
                     'qty' => $item['qty'],
                     'total' => $item['price'] * $item['qty'],
                 ]);
 
                 // Decrement stock
-                $product->decrement('stock', $item['qty']);
+                if ($product) {
+                    $product->decrement('stock', $item['qty']);
+                }
             }
 
             DB::commit();

@@ -97,44 +97,91 @@
                         <hr class="my-4">
 
                         <!-- Add to Cart & Actions Widget -->
-                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="product-action-wrapper">
                             @if($product->stock > 0)
-                                <form action="{{ route('cart.add') }}" method="POST" class="d-flex align-items-center gap-3">
+                                <form action="{{ route('cart.add') }}" method="POST" id="addToCartForm">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     
-                                    <div class="quantity-selector d-flex align-items-center border rounded-pill overflow-hidden bg-light" style="width: 140px; height: 50px;">
-                                        <button type="button" class="btn btn-link text-dark text-decoration-none px-3 font-weight-bold" onclick="decrementQty()"><i class="fas fa-minus"></i></button>
-                                        <input type="number" id="qty-input" name="qty" class="form-control text-center bg-transparent border-0 font-weight-bold" value="1" min="1" max="{{ $product->stock }}" style="box-shadow: none;">
-                                        <button type="button" class="btn btn-link text-dark text-decoration-none px-3 font-weight-bold" onclick="incrementQty()"><i class="fas fa-plus"></i></button>
-                                    </div>
+                                    <!-- Color Selector -->
+                                    @if(count($product->colors_list) > 0)
+                                        <div class="product-variant-color mb-4">
+                                            <label class="d-block font-weight-bold text-dark mb-2" style="font-size: 0.95rem;">
+                                                <i class="fas fa-palette me-1" style="color: #ff7c8b;"></i> Select Color: 
+                                                <span id="selectedColorName" class="badge bg-dark text-white ms-1 px-2 py-1" style="font-size: 0.85rem;">{{ $product->colors_list[0] }}</span>
+                                            </label>
+                                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                                @foreach($product->colors_list as $index => $color)
+                                                    <label class="color-option-label mb-0" style="cursor: pointer;">
+                                                        <input type="radio" name="color" value="{{ $color }}" class="d-none color-radio" {{ $index === 0 ? 'checked' : '' }} onchange="document.getElementById('selectedColorName').innerText = this.value;">
+                                                        <span class="color-pill px-3 py-2 border rounded-pill d-inline-flex align-items-center gap-2" style="font-size: 0.85rem; font-weight: 600; background: #fdfdfd; transition: all 0.2s;">
+                                                            <span class="color-dot rounded-circle" style="width: 14px; height: 14px; background-color: {{ strtolower(str_replace([' ', 'royal', 'antique', 'deep', 'baby'], '', $color)) }}; display: inline-block; border: 1px solid rgba(0,0,0,0.15);"></span>
+                                                            {{ $color }}
+                                                        </span>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
 
-                                    <button type="submit" class="btn text-white px-5 rounded-pill font-weight-bold d-flex align-items-center gap-2" style="background-color: #ff7c8b; border-color: #ff7c8b; height: 50px; font-size: 1.1rem; transition: all 0.3s;">
-                                        <i class="fas fa-shopping-bag"></i> Add To Cart
-                                    </button>
+                                    <!-- Size / Dimension Selector -->
+                                    @if(count($product->sizes_list) > 0)
+                                        <div class="product-variant-size mb-4">
+                                            <label class="d-block font-weight-bold text-dark mb-2" style="font-size: 0.95rem;">
+                                                <i class="fas fa-ruler-combined me-1" style="color: #ff7c8b;"></i> Select Size / Dimensions: 
+                                                <span id="selectedSizeName" class="badge bg-dark text-white ms-1 px-2 py-1" style="font-size: 0.85rem;">{{ $product->sizes_list[0] }}</span>
+                                            </label>
+                                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                                @foreach($product->sizes_list as $index => $size)
+                                                    <label class="size-option-label mb-0" style="cursor: pointer;">
+                                                        <input type="radio" name="size" value="{{ $size }}" class="d-none size-radio" {{ $index === 0 ? 'checked' : '' }} onchange="document.getElementById('selectedSizeName').innerText = this.value;">
+                                                        <span class="size-pill px-3 py-2 border rounded-3 d-inline-block" style="font-size: 0.85rem; font-weight: 600; min-width: 65px; text-align: center; background: #fdfdfd; transition: all 0.2s;">
+                                                            {{ $size }}
+                                                        </span>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="d-flex align-items-center gap-3 flex-wrap mt-4">
+                                        <div class="quantity-selector d-flex align-items-center border rounded-pill overflow-hidden bg-light" style="width: 140px; height: 50px;">
+                                            <button type="button" class="btn btn-link text-dark text-decoration-none px-3 font-weight-bold" onclick="decrementQty()"><i class="fas fa-minus"></i></button>
+                                            <input type="number" id="qty-input" name="qty" class="form-control text-center bg-transparent border-0 font-weight-bold" value="1" min="1" max="{{ $product->stock }}" style="box-shadow: none;">
+                                            <button type="button" class="btn btn-link text-dark text-decoration-none px-3 font-weight-bold" onclick="incrementQty()"><i class="fas fa-plus"></i></button>
+                                        </div>
+
+                                        <button type="submit" class="btn text-white px-5 rounded-pill font-weight-bold d-flex align-items-center gap-2" style="background-color: #ff7c8b; border-color: #ff7c8b; height: 50px; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,124,139,0.3);">
+                                            <i class="fas fa-shopping-bag"></i> Add To Cart
+                                        </button>
+
+                                        <!-- Wishlist & Compare Buttons -->
+                                        <a href="#" onclick="event.preventDefault(); document.getElementById('wl-form-show').submit();" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-color: #ccc;" data-tooltip="tooltip" title="Add To Wishlist">
+                                            <i class="fas fa-heart text-muted"></i>
+                                        </a>
+
+                                        <a href="#" onclick="event.preventDefault(); document.getElementById('cp-form-show').submit();" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-color: #ccc;" data-tooltip="tooltip" title="Add To Compare">
+                                            <i class="fas fa-exchange-alt text-muted"></i>
+                                        </a>
+                                    </div>
+                                </form>
+
+                                <form id="wl-form-show" action="{{ route('wishlist.add') }}" method="POST" class="d-none">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                </form>
+
+                                <form id="cp-form-show" action="{{ route('compare.add') }}" method="POST" class="d-none">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 </form>
                             @else
-                                <button class="btn btn-secondary px-5 rounded-pill font-weight-bold disabled" style="height: 50px; font-size: 1.1rem; background-color: #aaa; border-color: #aaa;">
-                                    Out Of Stock
-                                </button>
+                                <div class="d-flex align-items-center gap-3">
+                                    <button class="btn btn-secondary px-5 rounded-pill font-weight-bold disabled" style="height: 50px; font-size: 1.1rem; background-color: #aaa; border-color: #aaa;">
+                                        Out Of Stock
+                                    </button>
+                                </div>
                             @endif
-
-                            <!-- Wishlist & Compare Buttons -->
-                            <form id="wl-form-show" action="{{ route('wishlist.add') }}" method="POST" class="d-none">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            </form>
-                            <a href="#" onclick="event.preventDefault(); document.getElementById('wl-form-show').submit();" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-color: #ccc;" data-tooltip="tooltip" title="Add To Wishlist">
-                                <i class="fas fa-heart text-muted"></i>
-                            </a>
-
-                            <form id="cp-form-show" action="{{ route('compare.add') }}" method="POST" class="d-none">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            </form>
-                            <a href="#" onclick="event.preventDefault(); document.getElementById('cp-form-show').submit();" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-color: #ccc;" data-tooltip="tooltip" title="Add To Compare">
-                                <i class="fas fa-exchange-alt text-muted"></i>
-                            </a>
                         </div>
 
                         <hr class="my-4">
@@ -234,6 +281,30 @@
         }
         .product-item:hover img {
             transform: scale(1.05);
+        }
+
+        /* Color & Size Variant Selection Styles */
+        .color-radio:checked + .color-pill {
+            background-color: #222 !important;
+            color: #fff !important;
+            border-color: #222 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .color-radio:checked + .color-pill .color-dot {
+            border-color: #fff !important;
+        }
+        .color-pill:hover {
+            border-color: #ff7c8b !important;
+        }
+
+        .size-radio:checked + .size-pill {
+            background-color: #ff7c8b !important;
+            color: #fff !important;
+            border-color: #ff7c8b !important;
+            box-shadow: 0 4px 12px rgba(255,124,139,0.3);
+        }
+        .size-pill:hover {
+            border-color: #ff7c8b !important;
         }
     </style>
 

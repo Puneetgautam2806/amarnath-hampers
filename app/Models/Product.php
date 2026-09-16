@@ -21,6 +21,8 @@ class Product extends Model
         'status',
         'is_featured',
         'stock',
+        'colors',
+        'sizes',
     ];
 
     public function category()
@@ -36,5 +38,21 @@ class Product extends Model
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', 1);
+    }
+
+    public function getColorsListAttribute()
+    {
+        if (empty($this->colors)) {
+            return [];
+        }
+        return array_values(array_filter(array_map('trim', explode(',', $this->colors))));
+    }
+
+    public function getSizesListAttribute()
+    {
+        if (empty($this->sizes)) {
+            return [];
+        }
+        return array_values(array_filter(array_map('trim', explode(',', $this->sizes))));
     }
 }

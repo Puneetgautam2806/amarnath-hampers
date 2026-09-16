@@ -125,6 +125,16 @@
                                             </div>
                                             <div>
                                                 <h6 class="mb-0 text-dark font-weight-bold" style="font-size: 0.95rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $item['name'] }}</h6>
+                                                @if(!empty($item['color']) || !empty($item['size']))
+                                                    <div class="d-flex flex-wrap gap-1 mt-1">
+                                                        @if(!empty($item['color']))
+                                                            <span class="badge bg-light text-dark border px-1 py-0" style="font-size: 0.7rem;">Color: {{ $item['color'] }}</span>
+                                                        @endif
+                                                        @if(!empty($item['size']))
+                                                            <span class="badge bg-light text-dark border px-1 py-0" style="font-size: 0.7rem;">Size: {{ $item['size'] }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <small class="text-muted">₹{{ number_format($item['price'], 2) }} &times; {{ $item['qty'] }}</small>
                                             </div>
                                         </div>

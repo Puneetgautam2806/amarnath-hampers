@@ -131,8 +131,18 @@
                                 <tbody>
                                     @foreach($order->items as $item)
                                     <tr class="border-top">
-                                        <td class="py-3 font-weight-bold text-dark" style="font-size: 0.95rem; text-align: center;">
-                                            {{ $item->product_name }}
+                                        <td class="py-3 font-weight-bold text-dark" style="font-size: 0.95rem; text-align: left; padding-left: 20px;">
+                                            <div>{{ $item->product_name }}</div>
+                                            @if(!empty($item->color) || !empty($item->size))
+                                                <div class="d-flex flex-wrap gap-1 mt-1">
+                                                    @if(!empty($item->color))
+                                                        <span class="badge bg-light text-dark border px-2 py-0" style="font-size: 0.75rem;">Color: {{ $item->color }}</span>
+                                                    @endif
+                                                    @if(!empty($item->size))
+                                                        <span class="badge bg-light text-dark border px-2 py-0" style="font-size: 0.75rem;">Size: {{ $item->size }}</span>
+                                                    @endif
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="py-3 text-dark" style="font-size: 0.95rem;">
                                             ₹{{ number_format($item->price, 2) }}

@@ -94,6 +94,8 @@ class EcommerceSeeder extends Seeder
                 'description' => 'Elevate your grand wedding celebrations with our handcrafted Peacock Theme Wedding Hamper. Designed and assembled in Agra, this hamper combines regal aesthetics with functional luxury.',
                 'stock' => 15,
                 'is_featured' => 1,
+                'colors' => 'Royal Maroon, Antique Gold, Emerald Green, Baby Pink',
+                'sizes' => 'Standard (14"x14"), Large (18"x18"), Deluxe Set',
             ],
             [
                 'category' => 'Ring Ceremony Platters',
@@ -105,6 +107,8 @@ class EcommerceSeeder extends Seeder
                 'description' => 'Make your ring exchange moment unforgettable with this luxurious velvet-lined engagement platter.',
                 'stock' => 25,
                 'is_featured' => 1,
+                'colors' => 'Royal Red, Ivory White, Royal Blue, Peach Gold',
+                'sizes' => 'Compact (10"x10"), Standard (12"x12")',
             ],
             [
                 'category' => 'Bridal Accessories',
@@ -116,6 +120,8 @@ class EcommerceSeeder extends Seeder
                 'description' => 'Crafted for the discerning Indian bride, our Royal Bridal Chuda Box offers maximum protection with royal flair.',
                 'stock' => 30,
                 'is_featured' => 1,
+                'colors' => 'Crimson Red, Gold Embroidery, Velvet Maroon, Pastel Pink',
+                'sizes' => 'Small, Medium, Large',
             ],
             [
                 'category' => 'Designer Envelopes',
@@ -127,6 +133,8 @@ class EcommerceSeeder extends Seeder
                 'description' => 'Gift your blessings in style with our Premium Shagun Envelopes. Made from high-gsm metallic paper and embossed with traditional Indian motifs.',
                 'stock' => 100,
                 'is_featured' => 1,
+                'colors' => 'Golden Foil, Royal Maroon, Metallic Silver, Rose Gold',
+                'sizes' => 'Standard Pack (50 Pcs), Family Pack (100 Pcs)',
             ],
         ];
 
@@ -145,6 +153,8 @@ class EcommerceSeeder extends Seeder
                     'stock' => $prod['stock'],
                     'status' => 1,
                     'is_featured' => $prod['is_featured'],
+                    'colors' => $prod['colors'] ?? null,
+                    'sizes' => $prod['sizes'] ?? null,
                 ]
             );
         }
