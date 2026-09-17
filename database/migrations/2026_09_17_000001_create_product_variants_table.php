@@ -14,11 +14,11 @@ return new class extends Migration
         if (!Schema::hasTable('product_variants')) {
             Schema::create('product_variants', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+                $table->unsignedBigInteger('product_id')->index();
                 $table->string('color')->nullable();
                 $table->string('size')->nullable();
                 $table->string('sku')->nullable();
-                $table->decimal('price', 10, 2);
+                $table->decimal('price', 10, 2)->default(0.00);
                 $table->decimal('compare_at_price', 10, 2)->nullable();
                 $table->integer('stock')->default(10);
                 $table->string('image')->nullable();
@@ -28,7 +28,7 @@ return new class extends Migration
 
         Schema::table('order_items', function (Blueprint $table) {
             if (!Schema::hasColumn('order_items', 'variant_id')) {
-                $table->foreignId('variant_id')->nullable()->after('product_id')->constrained('product_variants')->nullOnDelete();
+                $table->unsignedBigInteger('variant_id')->nullable()->after('product_id')->index();
             }
             if (!Schema::hasColumn('order_items', 'variant_image')) {
                 $table->string('variant_image')->nullable()->after('size');
@@ -43,7 +43,7 @@ return new class extends Migration
     {
         Schema::table('order_items', function (Blueprint $table) {
             if (Schema::hasColumn('order_items', 'variant_id')) {
-                $table->dropConstrainedForeignId('variant_id');
+                $table->dropColumn('variant_id');
             }
             if (Schema::hasColumn('order_items', 'variant_image')) {
                 $table->dropColumn('variant_image');
