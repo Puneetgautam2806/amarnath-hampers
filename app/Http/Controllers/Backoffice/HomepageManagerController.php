@@ -103,7 +103,7 @@ class HomepageManagerController extends Controller
         $validated = $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
             'subtitle' => 'nullable|string|max:100',
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'btn1_text' => 'nullable|string|max:50',
             'btn1_link' => 'nullable|string|max:255',
@@ -123,13 +123,13 @@ class HomepageManagerController extends Controller
             $slider->image_path = 'uploads/sliders/' . $fileName;
         }
 
-        $slider->subtitle = $validated['subtitle'];
-        $slider->title = $validated['title'];
-        $slider->description = $validated['description'];
-        $slider->btn1_text = $validated['btn1_text'];
-        $slider->btn1_link = $validated['btn1_link'];
-        $slider->btn2_text = $validated['btn2_text'];
-        $slider->btn2_link = $validated['btn2_link'];
+        $slider->subtitle = $validated['subtitle'] ?? null;
+        $slider->title = $validated['title'] ?? null;
+        $slider->description = $validated['description'] ?? null;
+        $slider->btn1_text = $validated['btn1_text'] ?? null;
+        $slider->btn1_link = $validated['btn1_link'] ?? null;
+        $slider->btn2_text = $validated['btn2_text'] ?? null;
+        $slider->btn2_link = $validated['btn2_link'] ?? null;
         $slider->orders = $validated['orders'] ?? 0;
         $slider->status = (int) $validated['status'];
         $slider->save();
@@ -153,7 +153,7 @@ class HomepageManagerController extends Controller
         $validated = $request->validate([
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
             'subtitle' => 'nullable|string|max:100',
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'btn1_text' => 'nullable|string|max:50',
             'btn1_link' => 'nullable|string|max:255',
@@ -174,13 +174,13 @@ class HomepageManagerController extends Controller
             $slider->image_path = 'uploads/sliders/' . $fileName;
         }
 
-        $slider->subtitle = $validated['subtitle'];
-        $slider->title = $validated['title'];
-        $slider->description = $validated['description'];
-        $slider->btn1_text = $validated['btn1_text'];
-        $slider->btn1_link = $validated['btn1_link'];
-        $slider->btn2_text = $validated['btn2_text'];
-        $slider->btn2_link = $validated['btn2_link'];
+        $slider->subtitle = $validated['subtitle'] ?? null;
+        $slider->title = $validated['title'] ?? null;
+        $slider->description = $validated['description'] ?? null;
+        $slider->btn1_text = $validated['btn1_text'] ?? null;
+        $slider->btn1_link = $validated['btn1_link'] ?? null;
+        $slider->btn2_text = $validated['btn2_text'] ?? null;
+        $slider->btn2_link = $validated['btn2_link'] ?? null;
         $slider->orders = $validated['orders'] ?? 0;
         $slider->status = (int) $validated['status'];
         $slider->save();

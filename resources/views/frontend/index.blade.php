@@ -15,9 +15,11 @@
                                             @if($slider->subtitle)
                                                 <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">{{ $slider->subtitle }}</h6>
                                             @endif
-                                            <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
-                                                {!! $slider->title !!}
-                                            </h1>
+                                            @if($slider->title)
+                                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                                    {!! $slider->title !!}
+                                                </h1>
+                                            @endif
                                             @if($slider->description)
                                                 <p data-animation="fadeInLeft" data-delay=".75s">
                                                     {{ $slider->description }}

@@ -48,12 +48,12 @@
                             <!-- Main Title Details -->
                             <div class="col-md-6">
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold" for="title">Slide Title (Required)</label>
+                                    <label class="form-label fw-bold" for="title">Slide Title <span class="badge bg-label-secondary text-muted fw-normal ms-1">Optional</span></label>
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text"><i class="bx bx-heading"></i></span>
-                                        <input type="text" class="form-control py-2" id="title" name="title" value="{{ old('title') }}" placeholder="e.g. Elegant Corporate Hampers" required>
+                                        <input type="text" class="form-control py-2" id="title" name="title" value="{{ old('title') }}" placeholder="e.g. Elegant Corporate Hampers">
                                     </div>
-                                    <span class="text-muted small d-block mt-1">Main banner text. Use <code>&lt;br&gt;</code> to create line breaks.</span>
+                                    <span class="text-muted small d-block mt-1">Main banner text. Leave blank if your banner graphic already contains text.</span>
                                 </div>
 
                                 <!-- Collapse toggle button -->

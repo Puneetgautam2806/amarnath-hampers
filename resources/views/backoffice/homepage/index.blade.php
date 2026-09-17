@@ -275,7 +275,7 @@
                                                 @if($slider->subtitle)
                                                     <span class="badge bg-label-secondary px-2 mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">{{ $slider->subtitle }}</span>
                                                 @endif
-                                                <h6 class="mb-1 text-dark" style="font-weight: 700;">{!! strip_tags($slider->title) !!}</h6>
+                                                <h6 class="mb-1 text-dark" style="font-weight: 700;">{!! $slider->title ? strip_tags($slider->title) : '<span class="text-muted fw-normal fst-italic">(Graphic Banner Only)</span>' !!}</h6>
                                                 <p class="text-muted mb-0 small" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">{{ $slider->description }}</p>
                                             </div>
                                         </td>
@@ -370,12 +370,12 @@
                         <!-- Essential Slide Title -->
                         <div class="col-md-6 d-flex flex-column justify-content-center">
                             <div class="mb-4">
-                                <label class="form-label fw-bold" for="modal_title">Slide Title (Required)</label>
+                                <label class="form-label fw-bold" for="modal_title">Slide Title <span class="badge bg-label-secondary text-muted fw-normal ms-1">Optional</span></label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="bx bx-heading"></i></span>
-                                    <input type="text" class="form-control py-2" id="modal_title" name="title" placeholder="e.g. Premium Gift Hampers" required>
+                                    <input type="text" class="form-control py-2" id="modal_title" name="title" placeholder="e.g. Premium Gift Hampers">
                                 </div>
-                                <span class="text-muted small d-block mt-1">Main banner text. Use <code>&lt;br&gt;</code> to force line breaks.</span>
+                                <span class="text-muted small d-block mt-1">Main banner text. Leave blank if your banner graphic already contains text.</span>
                             </div>
 
                             <!-- Advanced collapsed drawer toggle button -->

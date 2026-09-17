@@ -22,6 +22,10 @@ use Illuminate\Support\Facades\Artisan;
 // Production Database Migration & Setup Helper Route
 Route::get('/migrate-db', function () {
     try {
+        try {
+            \Illuminate\Support\Facades\DB::statement("ALTER TABLE `sliders` MODIFY `title` VARCHAR(255) NULL");
+        } catch (\Throwable $t) {}
+
         Artisan::call('migrate', ['--force' => true]);
         $migrateOutput = Artisan::output();
         
