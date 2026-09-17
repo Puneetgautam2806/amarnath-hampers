@@ -243,9 +243,9 @@
                             <h5 class="mb-0 text-dark" style="font-weight: 700;">Hero Banner Sliders</h5>
                             <span class="text-muted small">Dynamic banners rendered in Owl Carousel on the frontend</span>
                         </div>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSliderModal" style="border-radius: 8px; font-weight: 600;">
+                        <a href="{{ route('homepage.createSlider') }}" class="btn btn-primary" style="border-radius: 8px; font-weight: 600;">
                             <i class="bx bx-plus me-1"></i> Add Banner Slide
-                        </button>
+                        </a>
                     </div>
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover align-middle mb-0">
@@ -263,7 +263,7 @@
                                 @forelse ($sliders as $slider)
                                     <tr>
                                         <td style="padding: 20px 24px;">
-                                            <strong class="text-secondary" style="font-size: 1.1rem;">#{{ $slider->orders }}</strong>
+                                             <strong class="text-secondary" style="font-size: 1.1rem;">#{{ $slider->orders }}</strong>
                                         </td>
                                         <td style="padding: 20px 24px;">
                                             <div class="slider-thumbnail" style="width: 100px; height: 60px; border-radius: 8px; border: 1px solid #e9ecef; overflow: hidden; background-color: #f8f9fa;">
@@ -321,9 +321,9 @@
                                                 <i class="bx bx-images text-light" style="font-size: 4rem;"></i>
                                                 <h6 class="mt-3" style="font-weight: 600;">No Dynamic Slides Registered</h6>
                                                 <p class="text-muted small">The homepage is currently running with standard fallback template sliders.</p>
-                                                <button type="button" class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addSliderModal">
+                                                <a href="{{ route('homepage.createSlider') }}" class="btn btn-sm btn-primary mt-2">
                                                     <i class="bx bx-plus me-1"></i> Create First Dynamic Slide
-                                                </button>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -337,131 +337,4 @@
         </div>
     </div>
 </div>
-
-<!-- ================= ADD SLIDER MODAL ================= -->
-<div class="modal fade" id="addSliderModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
-            <div class="modal-header border-bottom py-4" style="background: #f8f9fa; border-top-left-radius: 16px; border-top-right-radius: 16px;">
-                <div>
-                    <h5 class="modal-title text-dark fw-bold" id="addSliderModalLabel"><i class="bx bx-image-add text-primary me-1" style="font-size: 1.3rem;"></i> Add Banner Slide</h5>
-                    <span class="text-muted small">Create a new hero section slide for the homepage carousel</span>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('homepage.storeSlider') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body py-5 px-6">
-                    <div class="row">
-                        <!-- Slide Banner Image Upload -->
-                        <div class="col-md-6 border-end">
-                            <label class="form-label fw-bold text-secondary mb-2">Background Graphic (Required)</label>
-                            <div class="p-4 rounded text-center mb-3 d-flex flex-column align-items-center justify-content-center" style="background-color: #f8f9fa; border: 2px dashed #d9dee3; height: 260px; transition: border-color 0.25s;">
-                                <div class="image-preview-container-modal w-100 h-100 d-flex flex-column align-items-center justify-content-center" id="modal-image-preview">
-                                    <i class="bx bx-cloud-upload text-light mb-2" style="font-size: 4rem;"></i>
-                                    <span class="text-secondary small fw-bold">Drag & Drop or Click to Upload</span>
-                                    <span class="text-muted small d-block mt-1">Accepts JPEG, PNG, JPG, WEBP</span>
-                                </div>
-                                <input class="form-control position-absolute opacity-0" type="file" name="image" id="modal_image" accept="image/*" required onchange="previewModalFile()" style="height: 230px; width: 330px; cursor: pointer; z-index: 10;">
-                            </div>
-                            <span class="text-muted small text-center d-block">Automatic resizing will adapt any resolution flawlessly.</span>
-                        </div>
-
-                        <!-- Essential Slide Title -->
-                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                            <div class="mb-4">
-                                <label class="form-label fw-bold" for="modal_title">Slide Title <span class="badge bg-label-secondary text-muted fw-normal ms-1">Optional</span></label>
-                                <div class="input-group input-group-merge">
-                                    <span class="input-group-text"><i class="bx bx-heading"></i></span>
-                                    <input type="text" class="form-control py-2" id="modal_title" name="title" placeholder="e.g. Premium Gift Hampers">
-                                </div>
-                                <span class="text-muted small d-block mt-1">Main banner text. Leave blank if your banner graphic already contains text.</span>
-                            </div>
-
-                            <!-- Advanced collapsed drawer toggle button -->
-                            <div class="mt-2">
-                                <button class="btn btn-outline-secondary btn-sm w-100 fw-bold py-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSliderOptions" aria-expanded="false" aria-controls="advancedSliderOptions" style="border-radius: 8px;">
-                                    <i class="bx bx-slider-alt me-1"></i> Advanced Details & Buttons (Optional)
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Collapsible Advanced Sliders Section -->
-                    <div class="collapse mt-4" id="advancedSliderOptions">
-                        <div class="card card-body p-4 bg-light border" style="border-radius: 12px; border-style: dashed !important; border-width: 1px !important;">
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label class="form-label small fw-bold" for="m_subtitle">Subtitle / Category Badge</label>
-                                    <input type="text" class="form-control form-control-sm" id="m_subtitle" name="subtitle" placeholder="e.g. Start from $25.00">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label small fw-bold" for="m_orders">Display Sort Order</label>
-                                    <input type="number" class="form-control form-control-sm" id="m_orders" name="orders" value="0">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label small fw-bold" for="m_status">Status</label>
-                                    <select class="form-select form-select-sm" id="m_status" name="status">
-                                        <option value="1" selected>Active (Visible)</option>
-                                        <option value="2">Inactive (Draft)</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <label class="form-label small fw-bold" for="m_description">Description / Paragraph Text</label>
-                                <textarea class="form-control form-control-sm" id="m_description" name="description" rows="2" placeholder="Brief description to capture interest..."></textarea>
-                            </div>
-
-                            <div class="row">
-                                <!-- Button 1 -->
-                                <div class="col-md-6 border-end">
-                                    <h6 class="text-primary fw-bold mb-2 small"><i class="bx bx-link me-1"></i> Button 1 (Primary Action)</h6>
-                                    <div class="mb-2">
-                                        <input type="text" class="form-control form-control-sm" name="btn1_text" placeholder="Button Text (e.g. Shop Now)">
-                                    </div>
-                                    <div>
-                                        <input type="text" class="form-control form-control-sm" name="btn1_link" placeholder="Button Link (e.g. /shop)">
-                                    </div>
-                                </div>
-                                <!-- Button 2 -->
-                                <div class="col-md-6">
-                                    <h6 class="text-success fw-bold mb-2 small"><i class="bx bx-link me-1"></i> Button 2 (Secondary Action)</h6>
-                                    <div class="mb-2">
-                                        <input type="text" class="form-control form-control-sm" name="btn2_text" placeholder="Button Text (e.g. Learn More)">
-                                    </div>
-                                    <div>
-                                        <input type="text" class="form-control form-control-sm" name="btn2_link" placeholder="Button Link (e.g. /about)">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-top py-3 px-6" style="background: #f8f9fa; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius: 8px;">Cancel</button>
-                    <button type="submit" class="btn btn-primary fw-bold" style="border-radius: 8px;"><i class="bx bx-check-circle me-1"></i> Save Banner Slide</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-function previewModalFile() {
-    const preview = document.getElementById('modal-image-preview');
-    const file = document.getElementById('modal_image').files[0];
-    const reader = new FileReader();
-
-    reader.addEventListener("load", function () {
-        preview.innerHTML = `<img src="${reader.result}" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;">`;
-    }, false);
-
-    if (file) {
-        reader.readAsDataURL(file);
-    }
-}
-</script>
 @endsection
