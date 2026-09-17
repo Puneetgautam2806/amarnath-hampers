@@ -7,31 +7,70 @@
             <div class="container-fluid px-0">
                 <div class="hero-slider owl-carousel owl-theme">
                     @forelse($sliders as $slider)
-                        <div class="hero-single" style="background-image: url({{ asset($slider->image_path) }});">
-                            <div class="container">
-                                <div class="row align-items-center">
-                                    <div class="col-lg-6">
-                                        <div class="hero-content">
+                        @php
+                            $pos = $slider->content_position ?? 'left';
+                            $align = $slider->text_align ?? $pos;
+                            $rowJustify = $pos === 'center' ? 'justify-content-center' : ($pos === 'right' ? 'justify-content-end' : 'justify-content-start');
+                            $colClass = $pos === 'center' ? 'col-lg-8 col-md-10' : 'col-lg-7 col-md-9';
+                            $alignClass = $align === 'center' ? 'text-center' : ($align === 'right' ? 'text-end' : 'text-start');
+                            $btnJustify = $align === 'center' ? 'justify-content-center' : ($align === 'right' ? 'justify-content-end' : 'justify-content-start');
+                        @endphp
+                        <div class="hero-single position-relative" style="background-image: url({{ asset($slider->image_path) }});">
+                            @if(!empty($slider->overlay_opacity) && $slider->overlay_opacity > 0)
+                                <div class="hero-overlay-shade position-absolute w-100 h-100" style="top: 0; left: 0; background: rgba(0,0,0, {{ $slider->overlay_opacity / 100 }}); z-index: 1;"></div>
+                            @endif
+                            <div class="container position-relative" style="z-index: 2;">
+                                <div class="row align-items-center {{ $rowJustify }}">
+                                    <div class="{{ $colClass }} {{ $alignClass }}">
+                                        <div class="hero-content {{ $alignClass }}">
                                             @if($slider->subtitle)
-                                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">{{ $slider->subtitle }}</h6>
+                                                <h6 class="hero-sub-title d-inline-block" data-animation="fadeInUp" data-delay=".25s" style="{{ $slider->subtitle_color ? 'color: '.$slider->subtitle_color.' !important;' : '' }} {{ $slider->subtitle_bg ? 'background-color: '.$slider->subtitle_bg.' !important; padding: 4px 14px; border-radius: 20px;' : '' }}">{{ $slider->subtitle }}</h6>
                                             @endif
                                             @if($slider->title)
-                                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s" style="{{ $slider->title_color ? 'color: '.$slider->title_color.' !important;' : '' }}">
                                                     {!! $slider->title !!}
                                                 </h1>
                                             @endif
                                             @if($slider->description)
-                                                <p data-animation="fadeInLeft" data-delay=".75s">
+                                                <p data-animation="fadeInLeft" data-delay=".75s" style="{{ $slider->description_color ? 'color: '.$slider->description_color.' !important;' : '' }}">
                                                     {{ $slider->description }}
                                                 </p>
                                             @endif
                                             @if($slider->btn1_text || $slider->btn2_text)
-                                                <div class="hero-btn" data-animation="fadeInUp" data-delay="1s">
+                                                <div class="hero-btn d-flex flex-wrap gap-2 {{ $btnJustify }}" data-animation="fadeInUp" data-delay="1s">
                                                     @if($slider->btn1_text)
-                                                        <a href="{{ $slider->btn1_link ?: '#' }}" class="theme-btn">{{ $slider->btn1_text }}<i class="fas fa-arrow-right"></i></a>
+                                                        @php
+                                                            $b1Style = $slider->btn1_style ?? 'theme-primary';
+                                                            $b1CustomStyle = '';
+                                                            $b1Class = 'theme-btn';
+                                                            if ($b1Style === 'dark-solid') { $b1Class = 'theme-btn btn-banner-dark'; }
+                                                            elseif ($b1Style === 'white-solid') { $b1Class = 'theme-btn btn-banner-white'; }
+                                                            elseif ($b1Style === 'gold-solid') { $b1Class = 'theme-btn btn-banner-gold'; }
+                                                            elseif ($b1Style === 'outline-pink') { $b1Class = 'theme-btn btn-banner-outline-pink'; }
+                                                            elseif ($b1Style === 'outline-white') { $b1Class = 'theme-btn btn-banner-outline-white'; }
+                                                            elseif ($b1Style === 'outline-dark') { $b1Class = 'theme-btn btn-banner-outline-dark'; }
+                                                            elseif ($b1Style === 'custom') {
+                                                                $b1CustomStyle = 'background-color: '.($slider->btn1_bg_color ?: '#ff7c8b').' !important; border-color: '.($slider->btn1_bg_color ?: '#ff7c8b').' !important; color: '.($slider->btn1_text_color ?: '#ffffff').' !important;';
+                                                            }
+                                                        @endphp
+                                                        <a href="{{ $slider->btn1_link ?: '#' }}" class="{{ $b1Class }}" style="{{ $b1CustomStyle }}">{{ $slider->btn1_text }}<i class="fas fa-arrow-right ms-2"></i></a>
                                                     @endif
                                                     @if($slider->btn2_text)
-                                                        <a href="{{ $slider->btn2_link ?: '#' }}" class="theme-btn theme-btn2">{{ $slider->btn2_text }}<i class="fas fa-arrow-right"></i></a>
+                                                        @php
+                                                            $b2Style = $slider->btn2_style ?? 'theme-outline';
+                                                            $b2CustomStyle = '';
+                                                            $b2Class = 'theme-btn theme-btn2';
+                                                            if ($b2Style === 'white-outline') { $b2Class = 'theme-btn btn-banner-outline-white'; }
+                                                            elseif ($b2Style === 'dark-outline') { $b2Class = 'theme-btn btn-banner-outline-dark'; }
+                                                            elseif ($b2Style === 'theme-primary') { $b2Class = 'theme-btn'; }
+                                                            elseif ($b2Style === 'dark-solid') { $b2Class = 'theme-btn btn-banner-dark'; }
+                                                            elseif ($b2Style === 'white-solid') { $b2Class = 'theme-btn btn-banner-white'; }
+                                                            elseif ($b2Style === 'gold-solid') { $b2Class = 'theme-btn btn-banner-gold'; }
+                                                            elseif ($b2Style === 'custom') {
+                                                                $b2CustomStyle = 'background-color: '.($slider->btn2_bg_color ?: 'transparent').' !important; border-color: '.($slider->btn2_bg_color ?: '#ff7c8b').' !important; color: '.($slider->btn2_text_color ?: '#ffffff').' !important;';
+                                                            }
+                                                        @endphp
+                                                        <a href="{{ $slider->btn2_link ?: '#' }}" class="{{ $b2Class }}" style="{{ $b2CustomStyle }}">{{ $slider->btn2_text }}<i class="fas fa-arrow-right ms-2"></i></a>
                                                     @endif
                                                 </div>
                                             @endif

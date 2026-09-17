@@ -677,10 +677,67 @@
             }
         });
     </script>
+    <!-- Banner Button Styling Presets -->
+    <style>
+        .btn-banner-dark {
+            background-color: #1a1a1a !important;
+            border: 2px solid #1a1a1a !important;
+            color: #ffffff !important;
+        }
+        .btn-banner-dark:hover {
+            background-color: #ff7c8b !important;
+            border-color: #ff7c8b !important;
+            color: #ffffff !important;
+        }
+        .btn-banner-white {
+            background-color: #ffffff !important;
+            border: 2px solid #ffffff !important;
+            color: #1a1a1a !important;
+        }
+        .btn-banner-white:hover {
+            background-color: #ff7c8b !important;
+            border-color: #ff7c8b !important;
+            color: #ffffff !important;
+        }
+        .btn-banner-gold {
+            background-color: #cf9b13 !important;
+            border: 2px solid #cf9b13 !important;
+            color: #ffffff !important;
+        }
+        .btn-banner-gold:hover {
+            background-color: #b3840b !important;
+            border-color: #b3840b !important;
+            color: #ffffff !important;
+        }
+        .btn-banner-outline-pink {
+            background-color: transparent !important;
+            border: 2px solid #ff7c8b !important;
+            color: #ff7c8b !important;
+        }
+        .btn-banner-outline-pink:hover {
+            background-color: #ff7c8b !important;
+            color: #ffffff !important;
+        }
+        .btn-banner-outline-white {
+            background-color: transparent !important;
+            border: 2px solid #ffffff !important;
+            color: #ffffff !important;
+        }
+        .btn-banner-outline-white:hover {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
+        }
+        .btn-banner-outline-dark {
+            background-color: transparent !important;
+            border: 2px solid #1a1a1a !important;
+            color: #1a1a1a !important;
+        }
+        .btn-banner-outline-dark:hover {
+            background-color: #1a1a1a !important;
+            color: #ffffff !important;
+        }
+    </style>
 </body>
-
-
-<!-- Mirrored from live.themewild.com/gifoy/index-3.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Mar 2026 17:21:52 GMT -->
 </html>
 
 

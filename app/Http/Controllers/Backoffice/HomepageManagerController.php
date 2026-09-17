@@ -107,8 +107,21 @@ class HomepageManagerController extends Controller
             'description' => 'nullable|string',
             'btn1_text' => 'nullable|string|max:50',
             'btn1_link' => 'nullable|string|max:255',
+            'btn1_style' => 'nullable|string|max:50',
+            'btn1_bg_color' => 'nullable|string|max:30',
+            'btn1_text_color' => 'nullable|string|max:30',
             'btn2_text' => 'nullable|string|max:50',
             'btn2_link' => 'nullable|string|max:255',
+            'btn2_style' => 'nullable|string|max:50',
+            'btn2_bg_color' => 'nullable|string|max:30',
+            'btn2_text_color' => 'nullable|string|max:30',
+            'content_position' => 'nullable|in:left,center,right',
+            'text_align' => 'nullable|in:left,center,right',
+            'overlay_opacity' => 'nullable|integer|min:0|max:100',
+            'title_color' => 'nullable|string|max:30',
+            'subtitle_color' => 'nullable|string|max:30',
+            'subtitle_bg' => 'nullable|string|max:30',
+            'description_color' => 'nullable|string|max:30',
             'orders' => 'nullable|integer',
             'status' => 'required|in:1,2',
         ]);
@@ -128,8 +141,21 @@ class HomepageManagerController extends Controller
         $slider->description = $validated['description'] ?? null;
         $slider->btn1_text = $validated['btn1_text'] ?? null;
         $slider->btn1_link = $validated['btn1_link'] ?? null;
+        $slider->btn1_style = $validated['btn1_style'] ?? 'theme-primary';
+        $slider->btn1_bg_color = $validated['btn1_bg_color'] ?? null;
+        $slider->btn1_text_color = $validated['btn1_text_color'] ?? null;
         $slider->btn2_text = $validated['btn2_text'] ?? null;
         $slider->btn2_link = $validated['btn2_link'] ?? null;
+        $slider->btn2_style = $validated['btn2_style'] ?? 'theme-outline';
+        $slider->btn2_bg_color = $validated['btn2_bg_color'] ?? null;
+        $slider->btn2_text_color = $validated['btn2_text_color'] ?? null;
+        $slider->content_position = $validated['content_position'] ?? 'left';
+        $slider->text_align = $validated['text_align'] ?? 'left';
+        $slider->overlay_opacity = isset($validated['overlay_opacity']) ? (int)$validated['overlay_opacity'] : 0;
+        $slider->title_color = $validated['title_color'] ?? null;
+        $slider->subtitle_color = $validated['subtitle_color'] ?? null;
+        $slider->subtitle_bg = $validated['subtitle_bg'] ?? null;
+        $slider->description_color = $validated['description_color'] ?? null;
         $slider->orders = $validated['orders'] ?? 0;
         $slider->status = (int) $validated['status'];
         $slider->save();
@@ -157,8 +183,21 @@ class HomepageManagerController extends Controller
             'description' => 'nullable|string',
             'btn1_text' => 'nullable|string|max:50',
             'btn1_link' => 'nullable|string|max:255',
+            'btn1_style' => 'nullable|string|max:50',
+            'btn1_bg_color' => 'nullable|string|max:30',
+            'btn1_text_color' => 'nullable|string|max:30',
             'btn2_text' => 'nullable|string|max:50',
             'btn2_link' => 'nullable|string|max:255',
+            'btn2_style' => 'nullable|string|max:50',
+            'btn2_bg_color' => 'nullable|string|max:30',
+            'btn2_text_color' => 'nullable|string|max:30',
+            'content_position' => 'nullable|in:left,center,right',
+            'text_align' => 'nullable|in:left,center,right',
+            'overlay_opacity' => 'nullable|integer|min:0|max:100',
+            'title_color' => 'nullable|string|max:30',
+            'subtitle_color' => 'nullable|string|max:30',
+            'subtitle_bg' => 'nullable|string|max:30',
+            'description_color' => 'nullable|string|max:30',
             'orders' => 'nullable|integer',
             'status' => 'required|in:1,2',
         ]);
@@ -179,8 +218,21 @@ class HomepageManagerController extends Controller
         $slider->description = $validated['description'] ?? null;
         $slider->btn1_text = $validated['btn1_text'] ?? null;
         $slider->btn1_link = $validated['btn1_link'] ?? null;
+        $slider->btn1_style = $validated['btn1_style'] ?? 'theme-primary';
+        $slider->btn1_bg_color = $validated['btn1_bg_color'] ?? null;
+        $slider->btn1_text_color = $validated['btn1_text_color'] ?? null;
         $slider->btn2_text = $validated['btn2_text'] ?? null;
         $slider->btn2_link = $validated['btn2_link'] ?? null;
+        $slider->btn2_style = $validated['btn2_style'] ?? 'theme-outline';
+        $slider->btn2_bg_color = $validated['btn2_bg_color'] ?? null;
+        $slider->btn2_text_color = $validated['btn2_text_color'] ?? null;
+        $slider->content_position = $validated['content_position'] ?? 'left';
+        $slider->text_align = $validated['text_align'] ?? 'left';
+        $slider->overlay_opacity = isset($validated['overlay_opacity']) ? (int)$validated['overlay_opacity'] : 0;
+        $slider->title_color = $validated['title_color'] ?? null;
+        $slider->subtitle_color = $validated['subtitle_color'] ?? null;
+        $slider->subtitle_bg = $validated['subtitle_bg'] ?? null;
+        $slider->description_color = $validated['description_color'] ?? null;
         $slider->orders = $validated['orders'] ?? 0;
         $slider->status = (int) $validated['status'];
         $slider->save();
