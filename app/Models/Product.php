@@ -30,6 +30,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 1);
@@ -42,6 +47,12 @@ class Product extends Model
 
     public function getColorsListAttribute()
     {
+        if ($this->relationLoaded('variants') || $this->variants()->exists()) {
+            $variantColors = $this->variants->pluck('color')->filter()->unique()->values()->toArray();
+            if (!empty($variantColors)) {
+                return $variantColors;
+            }
+        }
         if (empty($this->colors)) {
             return [];
         }
@@ -50,9 +61,31 @@ class Product extends Model
 
     public function getSizesListAttribute()
     {
+        if ($this->relationLoaded('variants') || $this->variants()->exists()) {
+            $variantSizes = $this->variants->pluck('size')->filter()->unique()->values()->toArray();
+            if (!empty($variantSizes)) {
+                return $variantSizes;
+            }
+        }
         if (empty($this->sizes)) {
             return [];
         }
         return array_values(array_filter(array_map('trim', explode(',', $this->sizes))));
+    }
+
+    public function getMinPriceAttribute()
+    {
+        if ($this->variants && $this->variants->count() > 0) {
+            return $this->variants->min('price');
+        }
+        return $this->price;
+    }
+
+    public function getMaxPriceAttribute()
+    {
+        if ($this->variants && $this->variants->count() > 0) {
+            return $this->variants->max('price');
+        }
+        return $this->price;
     }
 }

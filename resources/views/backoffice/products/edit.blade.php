@@ -78,54 +78,99 @@
                     </div>
                 </div>
 
-                <!-- Product Variants Section (Colors & Sizes) -->
+                <!-- Product Variants Section (Colors & Sizes Matrix) -->
                 <div class="card mb-6 border-0" style="border-radius: 16px; box-shadow: 0 8px 26px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
-                    <div class="card-header border-bottom py-4 d-flex justify-content-between align-items-center">
+                    <div class="card-header border-bottom py-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
                         <div>
-                            <h5 class="mb-0 text-dark fw-bold"><i class="bx bx-palette text-primary me-2"></i> Product Variants (Colors & Sizes)</h5>
-                            <small class="text-muted">Allow customers to choose their preferred color and size on the product page</small>
+                            <h5 class="mb-0 text-dark fw-bold"><i class="bx bx-palette text-primary me-2"></i> Product Variations (Custom Price & Photo Per Color/Size)</h5>
+                            <small class="text-muted">Set specific prices, individual images, and stock for each color and size combination</small>
                         </div>
-                        <span class="badge bg-label-info">Optional</span>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addVariantRow()">
+                            <i class="bx bx-plus me-1"></i> Add Variant Row
+                        </button>
                     </div>
-                    <div class="card-body pt-6">
-                        <div class="mb-4">
-                            <label class="form-label text-dark fw-semibold d-flex justify-content-between">
-                                <span><i class="bx bx-color-fill text-warning me-1"></i> Available Colors</span>
-                                <small class="text-muted">Separate multiple colors with comma (,)</small>
-                            </label>
-                            <input type="text" name="colors" id="colorsInput" class="form-control" value="{{ old('colors', $product->colors) }}" placeholder="e.g. Royal Maroon, Antique Gold, Emerald Green, Baby Pink, Royal Blue" style="border-radius: 8px; padding: 10px 14px;">
-                            
-                            <!-- Quick add badges -->
-                            <div class="mt-2 d-flex flex-wrap gap-1 align-items-center">
-                                <small class="text-muted me-1">Quick Add:</small>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Royal Maroon')">+ Maroon</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Antique Gold')">+ Gold</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Emerald Green')">+ Emerald Green</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Baby Pink')">+ Pink</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Royal Blue')">+ Royal Blue</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Ivory White')">+ Ivory White</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('colorsInput', 'Deep Red')">+ Red</button>
+                    <div class="card-body pt-4">
+                        <!-- Quick Matrix Generator Bar -->
+                        <div class="p-3 bg-light rounded-3 mb-4 border">
+                            <h6 class="fw-bold mb-2 text-dark"><i class="bx bx-magic-wand text-warning me-1"></i> Quick Variant Matrix Generator</h6>
+                            <p class="small text-muted mb-3">Type your colors and sizes below and click Generate to create all pricing and photo rows at once:</p>
+                            <div class="row g-2 align-items-end">
+                                <div class="col-md-5">
+                                    <label class="form-label small fw-semibold">Colors (comma separated)</label>
+                                    <input type="text" id="genColors" class="form-control form-control-sm" placeholder="e.g. Royal Maroon, Antique Gold, Emerald Green" value="{{ $product->colors }}">
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label small fw-semibold">Sizes (comma separated)</label>
+                                    <input type="text" id="genSizes" class="form-control form-control-sm" placeholder="e.g. Small (10x10), Medium (14x14), Large (18x18)" value="{{ $product->sizes }}">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-sm btn-dark w-100" onclick="generateMatrixRows()">
+                                        <i class="bx bx-grid me-1"></i> Generate
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-2">
-                            <label class="form-label text-dark fw-semibold d-flex justify-content-between">
-                                <span><i class="bx bx-expand-arrows text-info me-1"></i> Available Sizes / Dimensions</span>
-                                <small class="text-muted">Separate multiple sizes with comma (,)</small>
-                            </label>
-                            <input type="text" name="sizes" id="sizesInput" class="form-control" value="{{ old('sizes', $product->sizes) }}" placeholder="e.g. Small (10x10), Medium (14x14), Large (18x18), Standard" style="border-radius: 8px; padding: 10px 14px;">
-                            
-                            <!-- Quick add badges -->
-                            <div class="mt-2 d-flex flex-wrap gap-1 align-items-center">
-                                <small class="text-muted me-1">Quick Add:</small>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Small')">+ Small</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Medium')">+ Medium</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Large')">+ Large</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Extra Large (XL)')">+ XL</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', 'Standard')">+ Standard</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', '10x10 Inch')">+ 10"x10"</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" onclick="addTag('sizesInput', '14x14 Inch')">+ 14"x14"</button>
-                            </div>
+                        <!-- Hidden tags inputs for backward compatibility if needed -->
+                        <input type="hidden" name="colors" id="colorsInput" value="{{ $product->colors }}">
+                        <input type="hidden" name="sizes" id="sizesInput" value="{{ $product->sizes }}">
+
+                        <!-- Variant Rows Table -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle text-center" id="variantsTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 18%;">Color</th>
+                                        <th style="width: 18%;">Size / Dimensions</th>
+                                        <th style="width: 16%;">Price (₹) *</th>
+                                        <th style="width: 16%;">Original Price (₹)</th>
+                                        <th style="width: 12%;">Stock</th>
+                                        <th style="width: 14%;">Variant Photo</th>
+                                        <th style="width: 6%;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="variantRowsContainer">
+                                    @if ($product->variants && $product->variants->count() > 0)
+                                        @foreach ($product->variants as $index => $variant)
+                                            <tr id="variant_row_{{ $index }}">
+                                                <input type="hidden" name="variants[{{ $index }}][id]" value="{{ $variant->id }}">
+                                                <td>
+                                                    <input type="text" name="variants[{{ $index }}][color]" class="form-control form-control-sm text-center" value="{{ $variant->color }}" placeholder="e.g. Maroon">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="variants[{{ $index }}][size]" class="form-control form-control-sm text-center" value="{{ $variant->size }}" placeholder="e.g. Small / 10x10">
+                                                </td>
+                                                <td>
+                                                    <input type="number" step="0.01" name="variants[{{ $index }}][price]" class="form-control form-control-sm text-center" value="{{ $variant->price }}" placeholder="₹ Price">
+                                                </td>
+                                                <td>
+                                                    <input type="number" step="0.01" name="variants[{{ $index }}][compare_at_price]" class="form-control form-control-sm text-center" value="{{ $variant->compare_at_price }}" placeholder="₹ Strike">
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="variants[{{ $index }}][stock]" class="form-control form-control-sm text-center" value="{{ $variant->stock }}">
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                                        <img id="varPreview_{{ $index }}" src="{{ $variant->image ? asset($variant->image) : '#' }}" class="rounded border {{ $variant->image ? '' : 'd-none' }}" style="width: 36px; height: 36px; object-fit: cover;">
+                                                        <label class="btn btn-xs btn-outline-primary mb-0" style="cursor: pointer;">
+                                                            <i class="bx bx-upload"></i> {{ $variant->image ? 'Change' : 'Photo' }}
+                                                            <input type="file" name="variants[{{ $index }}][image]" accept="image/*" class="d-none" onchange="previewVariantPhoto(this, {{ $index }})">
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-xs btn-outline-danger" onclick="removeVariantRow({{ $index }})">
+                                                        <i class="bx bx-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="noVariantsMsg" class="text-center py-4 text-muted small {{ ($product->variants && $product->variants->count() > 0) ? 'd-none' : '' }}">
+                            <i class="bx bx-info-circle me-1"></i> No custom variations added yet. Base price and image will be used if left empty, or click <strong>Generate</strong> above to create color/size rows with custom prices & photos.
                         </div>
                     </div>
                 </div>
@@ -219,6 +264,8 @@
 </div>
 
 <script>
+    let variantIndex = {{ $product->variants ? $product->variants->count() : 0 }};
+
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -226,7 +273,6 @@
                 document.getElementById('imagePreview').src = e.target.result;
                 document.getElementById('uploadPlaceholder').classList.add('d-none');
                 
-                // Show container if it was hidden
                 var previewCont = document.getElementById('imagePreviewContainer');
                 previewCont.classList.remove('d-none');
             };
@@ -234,16 +280,112 @@
         }
     }
 
-    function addTag(inputId, val) {
-        var input = document.getElementById(inputId);
-        var current = input.value.trim();
-        if (current === '') {
-            input.value = val;
+    function previewVariantPhoto(input, index) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var previewImg = document.getElementById('varPreview_' + index);
+                if (previewImg) {
+                    previewImg.src = e.target.result;
+                    previewImg.classList.remove('d-none');
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function addVariantRow(color = '', size = '', price = '', comparePrice = '', stock = '') {
+        document.getElementById('noVariantsMsg').classList.add('d-none');
+        var defaultPrice = price !== '' ? price : (document.querySelector('input[name="price"]').value || '');
+        var defaultCompare = comparePrice !== '' ? comparePrice : (document.querySelector('input[name="compare_at_price"]').value || '');
+        var defaultStock = stock !== '' ? stock : (document.querySelector('input[name="stock"]').value || '10');
+
+        var idx = variantIndex++;
+        var tbody = document.getElementById('variantRowsContainer');
+        var tr = document.createElement('tr');
+        tr.id = 'variant_row_' + idx;
+        tr.innerHTML = `
+            <td>
+                <input type="text" name="variants[${idx}][color]" class="form-control form-control-sm text-center" value="${color}" placeholder="e.g. Maroon">
+            </td>
+            <td>
+                <input type="text" name="variants[${idx}][size]" class="form-control form-control-sm text-center" value="${size}" placeholder="e.g. Small / 10x10">
+            </td>
+            <td>
+                <input type="number" step="0.01" name="variants[${idx}][price]" class="form-control form-control-sm text-center" value="${defaultPrice}" placeholder="₹ Price">
+            </td>
+            <td>
+                <input type="number" step="0.01" name="variants[${idx}][compare_at_price]" class="form-control form-control-sm text-center" value="${defaultCompare}" placeholder="₹ Strike">
+            </td>
+            <td>
+                <input type="number" name="variants[${idx}][stock]" class="form-control form-control-sm text-center" value="${defaultStock}">
+            </td>
+            <td>
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    <img id="varPreview_${idx}" src="#" class="rounded border d-none" style="width: 36px; height: 36px; object-fit: cover;">
+                    <label class="btn btn-xs btn-outline-primary mb-0" style="cursor: pointer;">
+                        <i class="bx bx-upload"></i> Photo
+                        <input type="file" name="variants[${idx}][image]" accept="image/*" class="d-none" onchange="previewVariantPhoto(this, ${idx})">
+                    </label>
+                </div>
+            </td>
+            <td>
+                <button type="button" class="btn btn-xs btn-outline-danger" onclick="removeVariantRow(${idx})">
+                    <i class="bx bx-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function removeVariantRow(idx) {
+        var row = document.getElementById('variant_row_' + idx);
+        if (row) {
+            row.remove();
+        }
+        var tbody = document.getElementById('variantRowsContainer');
+        if (tbody.children.length === 0) {
+            document.getElementById('noVariantsMsg').classList.remove('d-none');
+        }
+    }
+
+    function generateMatrixRows() {
+        var colorsRaw = document.getElementById('genColors').value.trim();
+        var sizesRaw = document.getElementById('genSizes').value.trim();
+
+        var colors = colorsRaw ? colorsRaw.split(',').map(function(s){ return s.trim(); }).filter(Boolean) : [];
+        var sizes = sizesRaw ? sizesRaw.split(',').map(function(s){ return s.trim(); }).filter(Boolean) : [];
+
+        if (colors.length === 0 && sizes.length === 0) {
+            alert('Please enter at least one color or size in the matrix generator fields.');
+            return;
+        }
+
+        if (colors.length > 0 && !document.getElementById('colorsInput').value) {
+            document.getElementById('colorsInput').value = colors.join(', ');
+        }
+        if (sizes.length > 0 && !document.getElementById('sizesInput').value) {
+            document.getElementById('sizesInput').value = sizes.join(', ');
+        }
+
+        var basePrice = document.querySelector('input[name="price"]').value || '';
+        var baseCompare = document.querySelector('input[name="compare_at_price"]').value || '';
+        var baseStock = document.querySelector('input[name="stock"]').value || '10';
+
+        if (colors.length > 0 && sizes.length > 0) {
+            colors.forEach(function(c) {
+                sizes.forEach(function(s) {
+                    addVariantRow(c, s, basePrice, baseCompare, baseStock);
+                });
+            });
+        } else if (colors.length > 0) {
+            colors.forEach(function(c) {
+                addVariantRow(c, '', basePrice, baseCompare, baseStock);
+            });
         } else {
-            var parts = current.split(',').map(function(s){ return s.trim(); });
-            if (parts.indexOf(val) === -1) {
-                input.value = current + ', ' + val;
-            }
+            sizes.forEach(function(s) {
+                addVariantRow('', s, basePrice, baseCompare, baseStock);
+            });
         }
     }
 </script>

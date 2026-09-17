@@ -31,7 +31,7 @@ class ShopController extends Controller
             });
         }
 
-        $products = $query->orderBy('id', 'desc')->paginate(12);
+        $products = $query->with('variants')->orderBy('id', 'desc')->paginate(12);
 
         return view('frontend.shop.index', compact('products', 'categories'));
     }
@@ -40,11 +40,12 @@ class ShopController extends Controller
     {
         $product = Product::where('slug', $slug)->where('status', 1)->firstOrFail();
         
-        // Eager load category
-        $product->load('category');
+        // Eager load category and variants
+        $product->load(['category', 'variants']);
 
         // Fetch related products in same category
-        $relatedProducts = Product::where('status', 1)
+        $relatedProducts = Product::with('variants')
+            ->where('status', 1)
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(4)

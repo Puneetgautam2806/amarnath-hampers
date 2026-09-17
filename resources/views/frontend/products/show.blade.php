@@ -34,8 +34,13 @@
             <div class="row">
                 <!-- Product Image Column -->
                 <div class="col-lg-6 mb-5">
-                    <div class="product-single-img p-5 bg-white border rounded shadow-sm d-flex align-items-center justify-content-center" style="height: 480px; background-color: #fcf8f8;">
-                        <img src="{{ asset($product->image) }}" class="img-fluid" style="max-height: 380px; object-fit: contain;" alt="{{ $product->name }}">
+                    <div class="product-single-img p-5 bg-white border rounded shadow-sm d-flex align-items-center justify-content-center position-relative" style="height: 480px; background-color: #fcf8f8;">
+                        <img id="mainProductImage" src="{{ asset($product->image) }}" class="img-fluid" style="max-height: 380px; object-fit: contain; transition: opacity 0.25s ease-in-out;" alt="{{ $product->name }}">
+                        <div id="imageLoadingSpinner" class="position-absolute d-none">
+                            <div class="spinner-border text-danger" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -65,18 +70,19 @@
                         </div>
 
                         <!-- Price block -->
-                        <div class="product-single-price d-flex align-items-center mb-4">
-                            @if($product->compare_at_price)
-                                <del class="text-muted mr-3" style="font-size: 1.3rem;">₹{{ number_format($product->compare_at_price, 2) }}</del>
-                            @endif
-                            <span class="font-weight-bold" style="font-size: 2rem; color: #ff7c8b;">₹{{ number_format($product->price, 2) }}</span>
+                        <div class="product-single-price d-flex align-items-center mb-4" id="priceDisplayContainer">
+                            <del class="text-muted mr-3 {{ $product->compare_at_price ? '' : 'd-none' }}" id="productComparePrice" style="font-size: 1.3rem;">
+                                ₹{{ $product->compare_at_price ? number_format($product->compare_at_price, 2) : '' }}
+                            </del>
+                            <span class="font-weight-bold" id="productCurrentPrice" style="font-size: 2rem; color: #ff7c8b;">
+                                ₹{{ number_format($product->price, 2) }}
+                            </span>
                             
-                            @if($product->compare_at_price > $product->price)
-                                @php
-                                    $discount = round((($product->compare_at_price - $product->price) / $product->compare_at_price) * 100);
-                                @endphp
-                                <span class="badge bg-danger text-white ml-3" style="font-size: 0.9rem; padding: 6px 12px;">Save {{ $discount }}%</span>
-                            @endif
+                            <span class="badge bg-danger text-white ml-3 {{ ($product->compare_at_price && $product->compare_at_price > $product->price) ? '' : 'd-none' }}" id="productDiscountBadge" style="font-size: 0.9rem; padding: 6px 12px;">
+                                @if($product->compare_at_price && $product->compare_at_price > $product->price)
+                                    Save {{ round((($product->compare_at_price - $product->price) / $product->compare_at_price) * 100) }}%
+                                @endif
+                            </span>
                         </div>
 
                         <!-- Short Description -->
@@ -85,20 +91,22 @@
                         </p>
 
                         <!-- Stock Indicator -->
-                        <div class="stock-indicator mb-4 d-flex align-items-center">
+                        <div class="stock-indicator mb-4 d-flex align-items-center" id="stockDisplayContainer">
                             <span class="mr-3 text-dark font-weight-bold">Availability:</span>
-                            @if($product->stock > 0)
-                                <span class="badge bg-success text-white px-3 py-2"><i class="fas fa-check-circle"></i> In Stock ({{ $product->stock }} items remaining)</span>
-                            @else
-                                <span class="badge bg-danger text-white px-3 py-2"><i class="fas fa-times-circle"></i> Out Of Stock</span>
-                            @endif
+                            <span id="productStockBadge" class="badge {{ $product->stock > 0 ? 'bg-success' : 'bg-danger' }} text-white px-3 py-2">
+                                @if($product->stock > 0)
+                                    <i class="fas fa-check-circle"></i> In Stock (<span id="productStockCount">{{ $product->stock }}</span> items remaining)
+                                @else
+                                    <i class="fas fa-times-circle"></i> Out Of Stock
+                                @endif
+                            </span>
                         </div>
 
                         <hr class="my-4">
 
                         <!-- Add to Cart & Actions Widget -->
                         <div class="product-action-wrapper">
-                            @if($product->stock > 0)
+                            @if($product->stock > 0 || ($product->variants && $product->variants->sum('stock') > 0))
                                 <form action="{{ route('cart.add') }}" method="POST" id="addToCartForm">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -112,10 +120,19 @@
                                             </label>
                                             <div class="d-flex flex-wrap gap-2 align-items-center">
                                                 @foreach($product->colors_list as $index => $color)
+                                                    @php
+                                                        // Check if variant has photo for this color
+                                                        $colorVariant = $product->variants ? $product->variants->firstWhere('color', $color) : null;
+                                                        $colorImg = $colorVariant && $colorVariant->image ? asset($colorVariant->image) : null;
+                                                    @endphp
                                                     <label class="color-option-label mb-0" style="cursor: pointer;">
-                                                        <input type="radio" name="color" value="{{ $color }}" class="d-none color-radio" {{ $index === 0 ? 'checked' : '' }} onchange="document.getElementById('selectedColorName').innerText = this.value;">
+                                                        <input type="radio" name="color" value="{{ $color }}" class="d-none color-radio" {{ $index === 0 ? 'checked' : '' }} onchange="onColorVariantChange('{{ addslashes($color) }}');">
                                                         <span class="color-pill px-3 py-2 border rounded-pill d-inline-flex align-items-center gap-2" style="font-size: 0.85rem; font-weight: 600; background: #fdfdfd; transition: all 0.2s;">
-                                                            <span class="color-dot rounded-circle" style="width: 14px; height: 14px; background-color: {{ strtolower(str_replace([' ', 'royal', 'antique', 'deep', 'baby'], '', $color)) }}; display: inline-block; border: 1px solid rgba(0,0,0,0.15);"></span>
+                                                            @if($colorImg)
+                                                                <img src="{{ $colorImg }}" class="rounded-circle border" style="width: 18px; height: 18px; object-fit: cover;">
+                                                            @else
+                                                                <span class="color-dot rounded-circle" data-color-name="{{ strtolower($color) }}" style="width: 14px; height: 14px; display: inline-block; border: 1px solid rgba(0,0,0,0.15); background-color: #888;"></span>
+                                                            @endif
                                                             {{ $color }}
                                                         </span>
                                                     </label>
@@ -134,7 +151,7 @@
                                             <div class="d-flex flex-wrap gap-2 align-items-center">
                                                 @foreach($product->sizes_list as $index => $size)
                                                     <label class="size-option-label mb-0" style="cursor: pointer;">
-                                                        <input type="radio" name="size" value="{{ $size }}" class="d-none size-radio" {{ $index === 0 ? 'checked' : '' }} onchange="document.getElementById('selectedSizeName').innerText = this.value;">
+                                                        <input type="radio" name="size" value="{{ $size }}" class="d-none size-radio" {{ $index === 0 ? 'checked' : '' }} onchange="onSizeVariantChange('{{ addslashes($size) }}');">
                                                         <span class="size-pill px-3 py-2 border rounded-3 d-inline-block" style="font-size: 0.85rem; font-weight: 600; min-width: 65px; text-align: center; background: #fdfdfd; transition: all 0.2s;">
                                                             {{ $size }}
                                                         </span>
@@ -144,14 +161,14 @@
                                         </div>
                                     @endif
 
-                                    <div class="d-flex align-items-center gap-3 flex-wrap mt-4">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap mt-4" id="cartActionContainer">
                                         <div class="quantity-selector d-flex align-items-center border rounded-pill overflow-hidden bg-light" style="width: 140px; height: 50px;">
                                             <button type="button" class="btn btn-link text-dark text-decoration-none px-3 font-weight-bold" onclick="decrementQty()"><i class="fas fa-minus"></i></button>
                                             <input type="number" id="qty-input" name="qty" class="form-control text-center bg-transparent border-0 font-weight-bold" value="1" min="1" max="{{ $product->stock }}" style="box-shadow: none;">
                                             <button type="button" class="btn btn-link text-dark text-decoration-none px-3 font-weight-bold" onclick="incrementQty()"><i class="fas fa-plus"></i></button>
                                         </div>
 
-                                        <button type="submit" class="btn text-white px-5 rounded-pill font-weight-bold d-flex align-items-center gap-2" style="background-color: #ff7c8b; border-color: #ff7c8b; height: 50px; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,124,139,0.3);">
+                                        <button type="submit" id="addToCartBtn" class="btn text-white px-5 rounded-pill font-weight-bold d-flex align-items-center gap-2" style="background-color: #ff7c8b; border-color: #ff7c8b; height: 50px; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,124,139,0.3);">
                                             <i class="fas fa-shopping-bag"></i> Add To Cart
                                         </button>
 
@@ -188,7 +205,7 @@
 
                         <!-- Details Block -->
                         <div class="product-details-meta list-unstyled m-0 p-0 text-muted" style="font-size: 0.95rem;">
-                            <div class="mb-2"><strong class="text-dark">SKU:</strong> GH-{{ str_pad($product->id, 5, '0', STR_PAD_LEFT) }}</div>
+                            <div class="mb-2"><strong class="text-dark">SKU:</strong> <span id="productSkuDisplay">GH-{{ str_pad($product->id, 5, '0', STR_PAD_LEFT) }}</span></div>
                             <div class="mb-2"><strong class="text-dark">Category:</strong> {{ $product->category ? $product->category->name : 'N/A' }}</div>
                             <div><strong class="text-dark">Shipping:</strong> Standard 1-3 Business Days Delivery</div>
                         </div>
@@ -247,12 +264,215 @@
         </div>
     </div>
 
-    <!-- Script for Quantity Increment/Decrement -->
+    <!-- Product Variations Data & Live Switching Engine -->
+    <script id="product-variants-data" type="application/json">
+        {!! json_encode($product->variants) !!}
+    </script>
+
     <script>
+        var baseProduct = {
+            image: "{{ asset($product->image) }}",
+            price: {{ (float)$product->price }},
+            compare_at_price: {{ $product->compare_at_price ? (float)$product->compare_at_price : 'null' }},
+            stock: {{ (int)$product->stock }},
+            sku: "GH-{{ str_pad($product->id, 5, '0', STR_PAD_LEFT) }}"
+        };
+
+        var variantsData = [];
+        try {
+            var rawJson = document.getElementById('product-variants-data').textContent;
+            variantsData = JSON.parse(rawJson) || [];
+        } catch (e) {
+            variantsData = [];
+        }
+
+        // Color name to hex color mapper for color dots
+        var colorMap = {
+            'maroon': '#800000',
+            'royal maroon': '#720017',
+            'red': '#dc3545',
+            'deep red': '#990000',
+            'crimson': '#dc143c',
+            'gold': '#d4af37',
+            'antique gold': '#cf9b13',
+            'yellow': '#ffc107',
+            'green': '#28a745',
+            'emerald green': '#046307',
+            'olive': '#808000',
+            'blue': '#007bff',
+            'royal blue': '#1c39bb',
+            'navy': '#000080',
+            'navy blue': '#000080',
+            'pink': '#ff7c8b',
+            'baby pink': '#f8b9cb',
+            'rose pink': '#e85a71',
+            'purple': '#6f42c1',
+            'lavender': '#967bb6',
+            'orange': '#fd7e14',
+            'black': '#222222',
+            'white': '#f8f9fa',
+            'ivory': '#fffff0',
+            'ivory white': '#fdfaf2',
+            'silver': '#c0c0c0',
+            'grey': '#6c757d',
+            'gray': '#6c757d',
+            'brown': '#8b4513',
+            'chocolate': '#7b3f00',
+            'beige': '#f5f5dc'
+        };
+
+        // Colorize dots automatically on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            var dots = document.querySelectorAll('.color-dot');
+            dots.forEach(function(dot) {
+                var cName = (dot.getAttribute('data-color-name') || '').trim().toLowerCase();
+                var resolvedColor = colorMap[cName];
+                if (!resolvedColor) {
+                    // Try partial match
+                    for (var key in colorMap) {
+                        if (cName.indexOf(key) !== -1) {
+                            resolvedColor = colorMap[key];
+                            break;
+                        }
+                    }
+                }
+                if (resolvedColor) {
+                    dot.style.backgroundColor = resolvedColor;
+                }
+            });
+
+            // Initial variant evaluation
+            syncVariantSelection();
+        });
+
+        function onColorVariantChange(colorName) {
+            var label = document.getElementById('selectedColorName');
+            if (label) label.innerText = colorName;
+            syncVariantSelection();
+        }
+
+        function onSizeVariantChange(sizeName) {
+            var label = document.getElementById('selectedSizeName');
+            if (label) label.innerText = sizeName;
+            syncVariantSelection();
+        }
+
+        function syncVariantSelection() {
+            var selColor = document.querySelector('input[name="color"]:checked')?.value || null;
+            var selSize = document.querySelector('input[name="size"]:checked')?.value || null;
+
+            var matchedVariant = null;
+
+            if (variantsData && variantsData.length > 0) {
+                // 1. Exact match (both Color AND Size)
+                if (selColor && selSize) {
+                    matchedVariant = variantsData.find(function(v) {
+                        return (v.color && v.color.trim().toLowerCase() === selColor.trim().toLowerCase()) &&
+                               (v.size && v.size.trim().toLowerCase() === selSize.trim().toLowerCase());
+                    });
+                }
+
+                // 2. Color match fallback
+                if (!matchedVariant && selColor) {
+                    matchedVariant = variantsData.find(function(v) {
+                        return v.color && v.color.trim().toLowerCase() === selColor.trim().toLowerCase();
+                    });
+                }
+
+                // 3. Size match fallback
+                if (!matchedVariant && selSize) {
+                    matchedVariant = variantsData.find(function(v) {
+                        return v.size && v.size.trim().toLowerCase() === selSize.trim().toLowerCase();
+                    });
+                }
+            }
+
+            // Target Values
+            var targetImg = (matchedVariant && matchedVariant.image) ? ("{{ url('') }}/" + matchedVariant.image.replace(/^\//, '')) : baseProduct.image;
+            var targetPrice = (matchedVariant && matchedVariant.price !== null && matchedVariant.price !== undefined) ? parseFloat(matchedVariant.price) : baseProduct.price;
+            var targetCompare = (matchedVariant && matchedVariant.compare_at_price) ? parseFloat(matchedVariant.compare_at_price) : baseProduct.compare_at_price;
+            var targetStock = (matchedVariant && matchedVariant.stock !== null && matchedVariant.stock !== undefined) ? parseInt(matchedVariant.stock) : baseProduct.stock;
+            var targetSku = (matchedVariant && matchedVariant.sku) ? matchedVariant.sku : baseProduct.sku;
+
+            // 1. Update Image with smooth fade
+            var mainImg = document.getElementById('mainProductImage');
+            if (mainImg && mainImg.src !== targetImg) {
+                mainImg.style.opacity = '0.3';
+                setTimeout(function() {
+                    mainImg.src = targetImg;
+                    mainImg.style.opacity = '1';
+                }, 180);
+            }
+
+            // 2. Update Prices
+            var priceElem = document.getElementById('productCurrentPrice');
+            if (priceElem) {
+                priceElem.innerText = '₹' + targetPrice.toFixed(2);
+            }
+
+            var compareElem = document.getElementById('productComparePrice');
+            var discountBadge = document.getElementById('productDiscountBadge');
+
+            if (targetCompare && targetCompare > targetPrice) {
+                if (compareElem) {
+                    compareElem.innerText = '₹' + targetCompare.toFixed(2);
+                    compareElem.classList.remove('d-none');
+                }
+                if (discountBadge) {
+                    var discountPct = Math.round(((targetCompare - targetPrice) / targetCompare) * 100);
+                    discountBadge.innerText = 'Save ' + discountPct + '%';
+                    discountBadge.classList.remove('d-none');
+                }
+            } else {
+                if (compareElem) compareElem.classList.add('d-none');
+                if (discountBadge) discountBadge.classList.add('d-none');
+            }
+
+            // 3. Update Stock & Availability
+            var stockBadge = document.getElementById('productStockBadge');
+            var stockCount = document.getElementById('productStockCount');
+            var qtyInput = document.getElementById('qty-input');
+            var addToCartBtn = document.getElementById('addToCartBtn');
+
+            if (targetStock > 0) {
+                if (stockBadge) {
+                    stockBadge.className = 'badge bg-success text-white px-3 py-2';
+                    stockBadge.innerHTML = '<i class="fas fa-check-circle"></i> In Stock (<span id="productStockCount">' + targetStock + '</span> items remaining)';
+                }
+                if (qtyInput) {
+                    qtyInput.max = targetStock;
+                    if (parseInt(qtyInput.value) > targetStock) {
+                        qtyInput.value = targetStock;
+                    }
+                }
+                if (addToCartBtn) {
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add To Cart';
+                    addToCartBtn.classList.remove('disabled');
+                }
+            } else {
+                if (stockBadge) {
+                    stockBadge.className = 'badge bg-danger text-white px-3 py-2';
+                    stockBadge.innerHTML = '<i class="fas fa-times-circle"></i> Out Of Stock';
+                }
+                if (addToCartBtn) {
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.innerText = 'Out Of Stock';
+                    addToCartBtn.classList.add('disabled');
+                }
+            }
+
+            // 4. Update SKU
+            var skuElem = document.getElementById('productSkuDisplay');
+            if (skuElem) {
+                skuElem.innerText = targetSku;
+            }
+        }
+
         function incrementQty() {
             var input = document.getElementById('qty-input');
             var val = parseInt(input.value);
-            var max = parseInt(input.max);
+            var max = parseInt(input.max) || 999;
             if (val < max) {
                 input.value = val + 1;
             }

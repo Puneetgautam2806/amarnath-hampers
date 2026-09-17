@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category')->orderBy('id', 'desc')->get();
+        $products = Product::with(['category', 'variants'])->orderBy('id', 'desc')->get();
         return view('backoffice.products.index', compact('products'));
     }
 
@@ -47,6 +47,13 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'colors' => 'nullable|string|max:500',
             'sizes' => 'nullable|string|max:500',
+            'variants' => 'nullable|array',
+            'variants.*.color' => 'nullable|string|max:100',
+            'variants.*.size' => 'nullable|string|max:100',
+            'variants.*.price' => 'nullable|numeric|min:0',
+            'variants.*.compare_at_price' => 'nullable|numeric|min:0',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
         ]);
 
         $slug = Str::slug($request->name);
@@ -64,7 +71,7 @@ class ProductController extends Controller
             $imagePath = 'uploads/products/' . $fileName;
         }
 
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'slug' => $slug,
             'category_id' => $request->category_id,
@@ -80,7 +87,35 @@ class ProductController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        // Save Product Variants if provided
+        if ($request->has('variants') && is_array($request->variants)) {
+            foreach ($request->variants as $index => $vData) {
+                if (empty($vData['color']) && empty($vData['size']) && empty($vData['price'])) {
+                    continue;
+                }
+
+                $variantImagePath = null;
+                if ($request->hasFile("variants.{$index}.image")) {
+                    $vFile = $request->file("variants.{$index}.image");
+                    $vFileName = 'variant_' . time() . '_' . uniqid() . '.' . $vFile->getClientOriginalExtension();
+                    $vFile->move(public_path('uploads/variants'), $vFileName);
+                    $variantImagePath = 'uploads/variants/' . $vFileName;
+                }
+
+                \App\Models\ProductVariant::create([
+                    'product_id' => $product->id,
+                    'color' => !empty($vData['color']) ? trim($vData['color']) : null,
+                    'size' => !empty($vData['size']) ? trim($vData['size']) : null,
+                    'sku' => !empty($vData['sku']) ? trim($vData['sku']) : 'GH-' . $product->id . '-' . ($index + 1),
+                    'price' => !empty($vData['price']) ? (float)$vData['price'] : $product->price,
+                    'compare_at_price' => !empty($vData['compare_at_price']) ? (float)$vData['compare_at_price'] : null,
+                    'stock' => isset($vData['stock']) && $vData['stock'] !== '' ? (int)$vData['stock'] : $product->stock,
+                    'image' => $variantImagePath,
+                ]);
+            }
+        }
+
+        return redirect()->route('products.index')->with('success', 'Product and variations created successfully!');
     }
 
     /**
@@ -89,6 +124,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::where('status', 1)->orderBy('orders', 'asc')->get();
+        $product->load('variants');
         return view('backoffice.products.edit', compact('product', 'categories'));
     }
 
@@ -110,6 +146,14 @@ class ProductController extends Controller
             'sizes' => 'nullable|string|max:500',
             'short_description' => 'nullable|string|max:1000',
             'description' => 'nullable|string',
+            'variants' => 'nullable|array',
+            'variants.*.id' => 'nullable|integer',
+            'variants.*.color' => 'nullable|string|max:100',
+            'variants.*.size' => 'nullable|string|max:100',
+            'variants.*.price' => 'nullable|numeric|min:0',
+            'variants.*.compare_at_price' => 'nullable|numeric|min:0',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
         ]);
 
         $slug = Str::slug($request->name);
@@ -148,7 +192,69 @@ class ProductController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+        // Handle Variants Sync
+        $submittedVariantIds = [];
+        if ($request->has('variants') && is_array($request->variants)) {
+            foreach ($request->variants as $index => $vData) {
+                if (empty($vData['color']) && empty($vData['size']) && empty($vData['price'])) {
+                    continue;
+                }
+
+                $variant = null;
+                if (!empty($vData['id'])) {
+                    $variant = \App\Models\ProductVariant::where('product_id', $product->id)->find($vData['id']);
+                }
+
+                $variantImagePath = $variant ? $variant->image : null;
+                if ($request->hasFile("variants.{$index}.image")) {
+                    if ($variant && $variant->image && File::exists(public_path($variant->image))) {
+                        File::delete(public_path($variant->image));
+                    }
+                    $vFile = $request->file("variants.{$index}.image");
+                    $vFileName = 'variant_' . time() . '_' . uniqid() . '.' . $vFile->getClientOriginalExtension();
+                    $vFile->move(public_path('uploads/variants'), $vFileName);
+                    $variantImagePath = 'uploads/variants/' . $vFileName;
+                }
+
+                if ($variant) {
+                    $variant->update([
+                        'color' => !empty($vData['color']) ? trim($vData['color']) : null,
+                        'size' => !empty($vData['size']) ? trim($vData['size']) : null,
+                        'sku' => !empty($vData['sku']) ? trim($vData['sku']) : $variant->sku,
+                        'price' => !empty($vData['price']) ? (float)$vData['price'] : $product->price,
+                        'compare_at_price' => !empty($vData['compare_at_price']) ? (float)$vData['compare_at_price'] : null,
+                        'stock' => isset($vData['stock']) && $vData['stock'] !== '' ? (int)$vData['stock'] : $product->stock,
+                        'image' => $variantImagePath,
+                    ]);
+                    $submittedVariantIds[] = $variant->id;
+                } else {
+                    $newV = \App\Models\ProductVariant::create([
+                        'product_id' => $product->id,
+                        'color' => !empty($vData['color']) ? trim($vData['color']) : null,
+                        'size' => !empty($vData['size']) ? trim($vData['size']) : null,
+                        'sku' => !empty($vData['sku']) ? trim($vData['sku']) : 'GH-' . $product->id . '-' . ($index + 1),
+                        'price' => !empty($vData['price']) ? (float)$vData['price'] : $product->price,
+                        'compare_at_price' => !empty($vData['compare_at_price']) ? (float)$vData['compare_at_price'] : null,
+                        'stock' => isset($vData['stock']) && $vData['stock'] !== '' ? (int)$vData['stock'] : $product->stock,
+                        'image' => $variantImagePath,
+                    ]);
+                    $submittedVariantIds[] = $newV->id;
+                }
+            }
+        }
+
+        // Delete variants that were removed by admin
+        $deletedVariants = \App\Models\ProductVariant::where('product_id', $product->id)
+            ->whereNotIn('id', $submittedVariantIds)
+            ->get();
+        foreach ($deletedVariants as $dVar) {
+            if ($dVar->image && File::exists(public_path($dVar->image))) {
+                File::delete(public_path($dVar->image));
+            }
+            $dVar->delete();
+        }
+
+        return redirect()->route('products.index')->with('success', 'Product and variations updated successfully!');
     }
 
     /**
@@ -158,6 +264,12 @@ class ProductController extends Controller
     {
         if ($product->image && File::exists(public_path($product->image))) {
             File::delete(public_path($product->image));
+        }
+        foreach ($product->variants as $variant) {
+            if ($variant->image && File::exists(public_path($variant->image))) {
+                File::delete(public_path($variant->image));
+            }
+            $variant->delete();
         }
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
