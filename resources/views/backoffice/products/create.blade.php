@@ -59,78 +59,18 @@
                     </div>
                     <div class="card-body pt-6">
                         <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label class="form-label text-dark fw-semibold">Selling Price ($) *</label>
+                            <div class="col-md-4 mb-4">
+                                <label class="form-label text-dark fw-semibold">Selling Price (₹) *</label>
                                 <input type="number" step="0.01" name="price" class="form-control" placeholder="0.00" required style="border-radius: 8px; padding: 10px 14px;">
                             </div>
-                            <div class="col-md-6 mb-4">
-                                <label class="form-label text-dark fw-semibold">Discounted / Original Price ($)</label>
-                                <input type="number" step="0.01" name="compare_at_price" class="form-control" placeholder="e.g. Original price for discount display" style="border-radius: 8px; padding: 10px 14px;">
+                            <div class="col-md-4 mb-4">
+                                <label class="form-label text-dark fw-semibold">Discounted / Original Price (₹)</label>
+                                <input type="number" step="0.01" name="compare_at_price" class="form-control" placeholder="e.g. Strike price" style="border-radius: 8px; padding: 10px 14px;">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label class="form-label text-dark fw-semibold">Inventory / Stock Count *</label>
+                            <div class="col-md-4 mb-4">
+                                <label class="form-label text-dark fw-semibold">Base Stock Count *</label>
                                 <input type="number" name="stock" class="form-control" value="10" required style="border-radius: 8px; padding: 10px 14px;">
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Variants Section (Colors & Sizes Matrix) -->
-                <div class="card mb-6 border-0" style="border-radius: 16px; box-shadow: 0 8px 26px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
-                    <div class="card-header border-bottom py-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <div>
-                            <h5 class="mb-0 text-dark fw-bold"><i class="bx bx-palette text-primary me-2"></i> Product Variations (Custom Price & Photo Per Color/Size)</h5>
-                            <small class="text-muted">Set specific prices, individual images, and stock for each color and size combination</small>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="addVariantRow()">
-                            <i class="bx bx-plus me-1"></i> Add Variant Row
-                        </button>
-                    </div>
-                    <div class="card-body pt-4">
-                        <!-- Quick Matrix Generator Bar -->
-                        <div class="p-3 bg-light rounded-3 mb-4 border">
-                            <h6 class="fw-bold mb-2 text-dark"><i class="bx bx-magic-wand text-warning me-1"></i> Quick Variant Matrix Generator</h6>
-                            <p class="small text-muted mb-3">Type your colors and sizes below and click Generate to create all pricing and photo rows at once:</p>
-                            <div class="row g-2 align-items-end">
-                                <div class="col-md-5">
-                                    <label class="form-label small fw-semibold">Colors (comma separated)</label>
-                                    <input type="text" id="genColors" class="form-control form-control-sm" placeholder="e.g. Royal Maroon, Antique Gold, Emerald Green">
-                                </div>
-                                <div class="col-md-5">
-                                    <label class="form-label small fw-semibold">Sizes (comma separated)</label>
-                                    <input type="text" id="genSizes" class="form-control form-control-sm" placeholder="e.g. Small (10x10), Medium (14x14), Large (18x18)">
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="button" class="btn btn-sm btn-dark w-100" onclick="generateMatrixRows()">
-                                        <i class="bx bx-grid me-1"></i> Generate
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Variant Rows Table -->
-                        <div class="table-responsive">
-                            <table class="table table-bordered align-middle text-center" id="variantsTable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 18%;">Color</th>
-                                        <th style="width: 18%;">Size / Dimensions</th>
-                                        <th style="width: 16%;">Price (₹) *</th>
-                                        <th style="width: 16%;">Original Price (₹)</th>
-                                        <th style="width: 12%;">Stock</th>
-                                        <th style="width: 14%;">Variant Photo</th>
-                                        <th style="width: 6%;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="variantRowsContainer">
-                                    <!-- Dynamic Rows will be inserted here -->
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="noVariantsMsg" class="text-center py-4 text-muted small">
-                            <i class="bx bx-info-circle me-1"></i> No custom variations added yet. Base price and image will be used if left empty, or click <strong>Generate</strong> above to create color/size rows with custom prices & photos.
                         </div>
                     </div>
                 </div>
@@ -193,16 +133,85 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Actions card -->
-                <div class="card border-0" style="border-radius: 16px; box-shadow: 0 8px 26px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
-                    <div class="card-body py-4">
-                        <button type="submit" class="btn btn-primary w-100 py-3 mb-2 fw-bold" style="border-radius: 10px; font-size: 15px;">
-                            <i class="bx bx-check me-1"></i> Save & Publish Product
+        <!-- FULL-WIDTH SECTION: Product Variations Matrix -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-6 border-0" style="border-radius: 16px; box-shadow: 0 8px 26px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
+                    <div class="card-header border-bottom py-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h5 class="mb-1 text-dark fw-bold"><i class="bx bx-palette text-primary me-2"></i> Product Variations (Custom Price & Photo Per Color/Size)</h5>
+                            <span class="text-muted small">Set custom price, strike-through price, stock, and photos for each color and size variant.</span>
+                        </div>
+                        <button type="button" class="btn btn-primary px-4 py-2 fw-semibold" onclick="addVariantRow()" style="border-radius: 8px;">
+                            <i class="bx bx-plus me-1"></i> Add Single Variant Row
                         </button>
-                        <a href="{{ route('products.index') }}" class="btn btn-outline-secondary w-100 py-3 fw-semibold" style="border-radius: 10px; font-size: 15px;">
-                            Cancel
-                        </a>
+                    </div>
+                    <div class="card-body pt-5">
+                        <!-- Quick Matrix Generator Bar -->
+                        <div class="p-4 bg-light rounded-3 mb-5 border" style="border-radius: 12px;">
+                            <h6 class="fw-bold mb-1 text-dark"><i class="bx bx-magic-wand text-warning me-1"></i> Quick Variant Matrix Generator</h6>
+                            <p class="small text-muted mb-3">Type your colors and sizes below and click <strong>Generate</strong> to automatically create all color/size pricing and photo rows at once:</p>
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold text-dark mb-1">Colors (comma separated)</label>
+                                    <input type="text" id="genColors" class="form-control" placeholder="e.g. Royal Maroon, Antique Gold, Emerald Green" style="padding: 10px 14px; border-radius: 8px; font-size: 14px;">
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold text-dark mb-1">Sizes / Dimensions (comma separated)</label>
+                                    <input type="text" id="genSizes" class="form-control" placeholder="e.g. Small (10x10), Medium (14x14), Large (18x18)" style="padding: 10px 14px; border-radius: 8px; font-size: 14px;">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-dark w-100 fw-bold" onclick="generateMatrixRows()" style="padding: 10px 14px; border-radius: 8px;">
+                                        <i class="bx bx-grid me-1"></i> Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Variant Rows Table with Wide, Spacious Inputs -->
+                        <div class="table-responsive" style="border-radius: 10px; border: 1px solid #e9ecef;">
+                            <table class="table table-hover align-middle mb-0" id="variantsTable" style="min-width: 950px;">
+                                <thead class="bg-light text-dark">
+                                    <tr>
+                                        <th style="padding: 14px 16px; font-weight: 700; width: 22%;">Color Name</th>
+                                        <th style="padding: 14px 16px; font-weight: 700; width: 22%;">Size / Dimensions</th>
+                                        <th style="padding: 14px 16px; font-weight: 700; width: 16%;">Selling Price (₹) *</th>
+                                        <th style="padding: 14px 16px; font-weight: 700; width: 16%;">Original Price (₹)</th>
+                                        <th style="padding: 14px 16px; font-weight: 700; width: 11%;">Stock</th>
+                                        <th style="padding: 14px 16px; font-weight: 700; width: 9%; text-align: center;">Photo</th>
+                                        <th style="padding: 14px 16px; font-weight: 700; width: 4%; text-align: center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="variantRowsContainer">
+                                    <!-- Dynamic Rows will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="noVariantsMsg" class="text-center py-5 text-muted small bg-white border border-top-0 rounded-bottom">
+                            <i class="bx bx-info-circle me-1" style="font-size: 1.2rem; vertical-align: middle;"></i> No custom variations added yet. Base price and image will be used if left empty, or click <strong>Generate</strong> above to create color/size rows with custom prices & photos.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card p-4 mb-6 border-0" style="border-radius: 16px; box-shadow: 0 8px 26px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); background: white;">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <span class="text-muted small">Please verify all prices, sizes, colors, and photos before saving.</span>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary px-4 py-2 fw-semibold" style="border-radius: 8px;">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold" style="border-radius: 8px; font-size: 15px;">
+                                <i class="bx bx-check me-1"></i> Save & Publish Product
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -222,19 +231,6 @@
                 document.getElementById('imagePreviewContainer').classList.remove('d-none');
             };
             reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function addTag(inputId, val) {
-        var input = document.getElementById(inputId);
-        var current = input.value.trim();
-        if (current === '') {
-            input.value = val;
-        } else {
-            var parts = current.split(',').map(function(s){ return s.trim(); });
-            if (parts.indexOf(val) === -1) {
-                input.value = current + ', ' + val;
-            }
         }
     }
 
@@ -263,32 +259,32 @@
         var tr = document.createElement('tr');
         tr.id = 'variant_row_' + idx;
         tr.innerHTML = `
-            <td>
-                <input type="text" name="variants[${idx}][color]" class="form-control form-control-sm text-center" value="${color}" placeholder="e.g. Maroon">
+            <td style="padding: 12px 14px;">
+                <input type="text" name="variants[${idx}][color]" class="form-control" value="${color}" placeholder="e.g. Royal Maroon" style="border-radius: 8px; padding: 8px 12px; font-size: 14px;">
             </td>
-            <td>
-                <input type="text" name="variants[${idx}][size]" class="form-control form-control-sm text-center" value="${size}" placeholder="e.g. Small / 10x10">
+            <td style="padding: 12px 14px;">
+                <input type="text" name="variants[${idx}][size]" class="form-control" value="${size}" placeholder="e.g. Small (10x10)" style="border-radius: 8px; padding: 8px 12px; font-size: 14px;">
             </td>
-            <td>
-                <input type="number" step="0.01" name="variants[${idx}][price]" class="form-control form-control-sm text-center" value="${defaultPrice}" placeholder="₹ Price">
+            <td style="padding: 12px 14px;">
+                <input type="number" step="0.01" name="variants[${idx}][price]" class="form-control" value="${defaultPrice}" placeholder="₹ Selling Price" style="border-radius: 8px; padding: 8px 12px; font-size: 14px;">
             </td>
-            <td>
-                <input type="number" step="0.01" name="variants[${idx}][compare_at_price]" class="form-control form-control-sm text-center" value="${defaultCompare}" placeholder="₹ Strike">
+            <td style="padding: 12px 14px;">
+                <input type="number" step="0.01" name="variants[${idx}][compare_at_price]" class="form-control" value="${defaultCompare}" placeholder="₹ Original Price" style="border-radius: 8px; padding: 8px 12px; font-size: 14px;">
             </td>
-            <td>
-                <input type="number" name="variants[${idx}][stock]" class="form-control form-control-sm text-center" value="${defaultStock}">
+            <td style="padding: 12px 14px;">
+                <input type="number" name="variants[${idx}][stock]" class="form-control" value="${defaultStock}" style="border-radius: 8px; padding: 8px 12px; font-size: 14px;">
             </td>
-            <td>
+            <td style="padding: 12px 14px; text-align: center;">
                 <div class="d-flex align-items-center justify-content-center gap-2">
-                    <img id="varPreview_${idx}" src="#" class="rounded border d-none" style="width: 36px; height: 36px; object-fit: cover;">
-                    <label class="btn btn-xs btn-outline-primary mb-0" style="cursor: pointer;">
+                    <img id="varPreview_${idx}" src="#" class="rounded border d-none" style="width: 38px; height: 38px; object-fit: cover;">
+                    <label class="btn btn-sm btn-outline-primary mb-0" style="cursor: pointer; padding: 6px 12px; border-radius: 6px; white-space: nowrap;">
                         <i class="bx bx-upload"></i> Photo
                         <input type="file" name="variants[${idx}][image]" accept="image/*" class="d-none" onchange="previewVariantPhoto(this, ${idx})">
                     </label>
                 </div>
             </td>
-            <td>
-                <button type="button" class="btn btn-xs btn-outline-danger" onclick="removeVariantRow(${idx})">
+            <td style="padding: 12px 14px; text-align: center;">
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeVariantRow(${idx})" style="border-radius: 6px; padding: 6px 10px;">
                     <i class="bx bx-trash"></i>
                 </button>
             </td>
@@ -317,14 +313,6 @@
         if (colors.length === 0 && sizes.length === 0) {
             alert('Please enter at least one color or size in the matrix generator fields.');
             return;
-        }
-
-        // Also sync to the top tags inputs if empty
-        if (colors.length > 0 && !document.getElementById('colorsInput').value) {
-            document.getElementById('colorsInput').value = colors.join(', ');
-        }
-        if (sizes.length > 0 && !document.getElementById('sizesInput').value) {
-            document.getElementById('sizesInput').value = sizes.join(', ');
         }
 
         var basePrice = document.querySelector('input[name="price"]').value || '';
